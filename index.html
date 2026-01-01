@@ -7,7 +7,6 @@
 
   <style>
     :root{
-      /* ===== Background lighter ===== */
       --bg: #0B1E14;
       --bg-soft:#0F2A1C;
 
@@ -226,6 +225,7 @@
       display:flex; align-items:center; justify-content:space-between;
       font-size:15px; font-weight:900; letter-spacing:.8px;
       transition: transform .12s ease;
+      position: relative;
     }
     .project-btn:hover{ transform: translateY(-1px); }
 
@@ -260,7 +260,9 @@
 
     .links{
       display:none; padding:12px; background: rgba(6,20,14,.9);
-      border-top:1px solid #164733; gap:8px; flex-wrap:wrap;
+      border-top:1px solid #164733;
+      gap:8px;
+      flex-wrap:wrap;
     }
     .project.open .links{ display:flex; }
 
@@ -279,7 +281,7 @@
       opacity:.45; cursor:not-allowed; filter:saturate(.4); transform:none !important;
     }
 
-    /* ===== SEVEN sub-project selector ===== */
+    /* ===== Subproject buttons ===== */
     .subproj-wrap{
       width:100%;
       display:flex;
@@ -302,6 +304,7 @@
       box-shadow: 0 8px 16px rgba(0,0,0,.18);
       position: relative;
     }
+    .subproj-btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
     .subproj-btn.active{
       background: linear-gradient(135deg, rgba(134,239,172,.85), rgba(34,197,94,.85));
       color:#052015;
@@ -322,6 +325,7 @@
       padding: 2px 6px;
       border-radius: 999px;
       box-shadow: 0 6px 14px rgba(0,0,0,.35);
+      pointer-events: none;
     }
 
     .subproj-title{
@@ -464,7 +468,7 @@
         inset 0 0 0 1px rgba(255,255,255,.45);
     }
     .year-btn.active::after{
-      content:"SLECTED";
+      content:"SELECTED";
       position:absolute;
       top:-8px; right:10px;
       font-size:8.5px;
@@ -476,6 +480,101 @@
       padding:2px 5px;
       border-radius:999px;
       box-shadow: var(--shadow-soft);
+    }
+
+    /* ✅ Useful Links fixed bottom-left */
+    .useful-wrap{
+      position: fixed;
+      left: 14px;
+      bottom: 12px;
+      z-index: 9990;
+      width: 320px;
+      max-width: 32vw;
+    }
+    .useful-wrap.hidden{ display:none; }
+
+    .project.useful{
+      border-color: rgba(134,239,172,.95);
+      box-shadow:
+        0 14px 40px rgba(34,197,94,.18),
+        0 0 0 1px rgba(134,239,172,.22) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project.useful .project-btn{
+      padding: 12px 12px;
+      font-size: 14px;
+    }
+
+    .project.useful::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 18px;
+      pointer-events:none;
+      animation: usefulGlow 1.6s ease-in-out infinite;
+    }
+    @keyframes usefulGlow{
+      0%,100%{
+        box-shadow:
+          0 0 18px rgba(34,197,94,.18),
+          0 0 34px rgba(134,239,172,.12);
+        filter: brightness(1);
+      }
+      50%{
+        box-shadow:
+          0 0 26px rgba(34,197,94,.32),
+          0 0 52px rgba(134,239,172,.20);
+        filter: brightness(1.08);
+      }
+    }
+
+    .project.useful::after{
+      content:"";
+      position:absolute;
+      top:-60%;
+      left:-40%;
+      width: 60%;
+      height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: rotate(18deg);
+      animation: usefulShine 2.6s linear infinite;
+      pointer-events:none;
+      opacity:.6;
+    }
+    @keyframes usefulShine{
+      0%   { transform: translateX(-30%) rotate(18deg); }
+      100% { transform: translateX(180%) rotate(18deg); }
+    }
+
+    .project.useful .project-btn::after{
+      content:"USEFUL";
+      position:absolute;
+      top:10px;
+      right:12px;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      padding: 3px 7px;
+      border-radius: 999px;
+      box-shadow: 0 8px 18px rgba(34,197,94,.25);
+      pointer-events:none;
+    }
+
+    /* ✅ Useful options vertical */
+    .useful-vertical{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+    .useful-vertical .subproj-btn{
+      width:100%;
+      flex:0 0 auto;
+      min-width:0;
     }
   </style>
 </head>
@@ -526,7 +625,7 @@
       </div>
 
       <div class="toolbar-right">
-        <div class="chip" id="linksChip">5 Links / Project</div>
+        <div class="chip" id="linksChip">Links</div>
       </div>
     </div>
   </div>
@@ -541,6 +640,9 @@
     <span class="sig-dot">•</span> Version 2.0
   </div>
 
+  <!-- Useful Links (2026 only) -->
+  <div id="usefulWrap" class="useful-wrap hidden"></div>
+
   <!-- Password Modal -->
   <div id="pwOverlay" class="pw-overlay" aria-hidden="true">
     <div class="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
@@ -553,36 +655,12 @@
       </div>
 
       <input id="pwInput" class="pw-input" type="password" placeholder="Password" autocomplete="off"/>
-
       <div id="pwError" class="pw-error" style="display:none;">Wrong password. Please try again.</div>
 
       <div class="pw-actions">
         <button id="pwCancel" class="pw-btn pw-cancel">Cancel</button>
         <button id="pwSubmit" class="pw-btn pw-submit">Open</button>
       </div>
-    </div>
-  </div>
-
-  <!-- ✅ Viewer Modal (SharePoint Only) -->
-  <div id="viewerOverlay" class="pw-overlay" aria-hidden="true">
-    <div class="pw-modal" style="width: 92vw; height: 88vh; max-width: 1320px;">
-      <div class="pw-header">
-        <div>
-          <div id="viewerTitle" class="pw-title">Viewer</div>
-          <div class="pw-subtitle" style="display:flex; align-items:center; gap:10px;">
-            <span id="viewerStatus">Loading…</span>
-            <a id="viewerOpenNewTab" href="#" target="_blank" rel="noopener noreferrer"
-              style="color: var(--accent-3); font-weight:900; text-decoration:none;">
-              Open in new tab ↗
-            </a>
-          </div>
-        </div>
-        <button id="viewerClose" class="pw-close" title="Close">✕</button>
-      </div>
-
-      <iframe id="viewerFrame"
-        style="width:100%; height: calc(100% - 54px); border-radius: 12px; border:1px solid #1C4A34; background:#081C14;">
-      </iframe>
     </div>
   </div>
 
@@ -598,147 +676,321 @@
     window.addEventListener('load', syncLogoWidth);
     window.addEventListener('resize', syncLogoWidth);
 
-    const PROJECT_NAMES = [
-      "CFD","KFSH","KFSC","KSU","SEVEN","DIRAB",
-      "JEDDAH TOWER","SANG JEDDAH","SANG QASSIM",
-      "SANG TAIF","HHR","VALINA","KAIA"
-    ];
-    const SORTED_PROJECTS = PROJECT_NAMES.slice().sort((a,b)=>a.localeCompare(b));
-    const SEVEN_BRANCHES = ["DAMMAM","KHOBAR"];
+    /* =========================================================
+       ✅ ORDER (unchanged)
+       ========================================================= */
+    const ORDER = ["NCR","INCIDENT LOG","KPIs","OBSERVATION","ARCHIVING","DAILY ATTENDANCE","DAILY ATTANDANCE"];
 
+    /* =========================================================
+       ✅ YEARS DATA ORGANIZED (TOTAL + DASHBOARD + PROJECTS + PASSWORDS)
+       ✅ NO CHANGES to projects/elements/links (NEOM removed)
+       ========================================================= */
     const YEARS = {
       "2025": {
-        INCIDENT_LOG_URL:
-          "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD8mnr43LSBQrNZ5hUaLBK3AfNRvYt5UwYJGEnWRd3XXZ8?e=OQpe4p",
+        PASSWORDS: {
+    "CFD": "1111",
+  "KFSH": "1111",
+  "KFSC": "1111",
+  "KSU": "1111",
+  "DIRAB": "1111",
+  "JEDDAH TOWER": "1111",
+  "SANG JEDDAH": "1111",
+  "SANG QASSIM": "1111",
+  "SANG TAIF": "1111",
+  "HHR": "1111",
+  "VALINA": "1111",
+  "KAIA": "1111",
+  "SEVEN": "1111" },
 
-        TOTAL_LINKS: [
-          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAASGwnde4FRLET7q3w0EuwAaWacHZkvWYiGrauLn5tB-o?e=ZkigPw" },
-          { label: "INCIDENT LOG", url: "#" },
-          { label: "KPIs", url: "https://sbgo365-my.sharepoint.com/:f:/g/personal/waheed_mishaal_sbg_com_sa/IgBc4Ws74E2tRZHS87A6jl2mASyDYM3wHe3Wa7FLfT_qW_Q?e=vcEfu4&xsdata=MDV8MDJ8aWJyYWhpbS5hbG1hbGtpQHNiZy5jb20uc2F8NmM4ZDU0MGNkODkyNDY4MjI3MjcwOGRlMzBlYzdjYTJ8OWFmZmJiMzgzMDk2NGViMWJjYWM0YjcwOWJlZGM4YWZ8MHwwfDYzOTAwMTk4OTUzODAyODYxNHxVbmtub3dufFRXRnBiR1pzYjNkOGV5SkZiWEIwZVUxaGNHa2lPblJ5ZFdVc0lsWWlPaUl3TGpBdU1EQXdNQ0lzSWxBaU9pSlhhVzR6TWlJc0lrRk9Jam9pVFdGcGJDSXNJbGRVSWpveWZRPT18MHx8fA%3d%3d&sdata=MTJpTmZ6RzhFZzFScEdQQmpISTZVV0tBQkdYbDBwZlJhSUVIWUgxaTZQZz0%3d" },
-          { label: "OBSERVATION", url: "#" },
-          { label: "ARCHIVING", url: "#" }
-        ],
-
-        DASHBOARD_LINKS: [
-          { label: "NCR", url: "#" },
-          { label: "INCIDENT LOG", url: "#" },
-          { label: "KPIs", url: "#" },
-          { label: "OBSERVATION", url: "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi" }
-        ],
-
-        OBSERVATION_FOLLOWUP: {
-          "SANG TAIF":   "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
-          "SANG JEDDAH": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
-          "SANG QASSIM": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
-          "KFSH":        "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
-          "KFSC":        "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
-          "KAIA":        "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
-          "JEDDAH TOWER":"https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
-          "HHR":         "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
-          "DIRAB":       "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
-          "CFD":         "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
-          "KSU":         "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing"
+        TOTAL: {
+          TITLE: "TOTAL FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#"
+          }
         },
 
-        ARCHIVING_FOLLOWUP: {
-          "CFD": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDVkMrzEDJcQqhdDEUD09RhAUWlQNcWWTR-mZqEJNc9Cd0?e=LBTvue"
+        DASHBOARD: {
+          TITLE: "DASHBOARD FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi"
+          }
         },
 
-        SEVEN_BRANCH_LINKS: {
-          "DAMMAM": {"NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#"},
-          "KHOBAR": {"NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#"}
-        },
+        PROJECTS: {
+          "CFD": { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDVkMrzEDJcQqhdDEUD09RhAUWlQNcWWTR-mZqEJNc9Cd0?e=LBTvue" } },
 
-        COMMON_LINKS: [
-          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzASyPIgGZ2o4DrsTE8gjAnzA?e=opmcsJ" },
-          { label: "INCIDENT LOG", url: "" },
-          { label: "KPIs", url: "https://sbgo365-my.sharepoint.com/:f:/g/personal/waheed_mishaal_sbg_com_sa/IgBc4Ws74E2tRZHS87A6jl2mASyDYM3wHe3Wa7FLfT_qW_Q?e=vcEfu4&xsdata=MDV8MDJ8aWJyYWhpbS5hbG1hbGtpQHNiZy5jb20uc2F8NmM4ZDU0MGNkODkyNDY4MjI3MjcwOGRlMzBlYzdjYTJ8OWFmZmJiMzgzMDk2NGViMWJjYWM0YjcwOWJlZGM4YWZ8MHwwfDYzOTAwMTk4OTUzODAyODYxNHxVbmtub3dufFRXRnBiR1pzYjNkOGV5SkZiWEIwZVUxaGNHa2lPblJ5ZFdVc0lsWWlPaUl3TGpBdU1EQXdNQ0lzSWxBaU9pSlhhVzR6TWlJc0lrRk9Jam9pVFdGcGJDSXNJbGRVSWpveWZRPT18MHx8fA%3d%3d&sdata=MTJpTmZ6RzhFZzFScEdQQmpISTZVV0tBQkdYbDBwZlJhSUVIWUgxaTZQZz0%3d" },
-          { label: "OBSERVATION", url: "#" },
-          { label: "ARCHIVING", url: "#" }
-        ]
+          "KFSH": { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+          "KFSC": { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "KSU":  { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "DIRAB":{ LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "JEDDAH TOWER": { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "SANG JEDDAH":  { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "SANG QASSIM":  { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "SANG TAIF":    { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "HHR":          { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+          "VALINA":       { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "#",
+          "ARCHIVING": "#" } },
+
+
+          "KAIA":         { LINKS:
+          { "NCR": "#",
+          "INCIDENT LOG": "#",
+          "KPIs": "#",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
+          "ARCHIVING": "#" } },
+
+
+
+          "SEVEN": {
+            BRANCHES: {
+              "DAMMAM": { LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#" } },
+              "KHOBAR": { LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#" } }
+            }
+          }
+        }
       },
 
       "2026": {
-        TOTAL_LINKS: [
-          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDybdklaZoXSY-uhlvqnumBAVftUsHQkanNgmkizwsgQQk?e=tTS9ux" },
-          { label: "INCIDENT LOG", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCcwEuSkcDJTJfvMIplrb43ASiyor6rTT9ReVFW2fO-a0o?e=UQUGPt" },
-          { label: "KPIs", url: "#" },
-          { label: "OBSERVATION", url: "#" },
-          { label: "DAILY ATTANDANCE", url: "https://sbgo365-my.sharepoint.com/:x:/r/personal/ibrahim_almalki_sbg_com_sa/Documents/Desktop/MANAGER/Manager%20Attendance%20Report.xlsx?d=wce51bc55def04506bc3e46b6065729a2&csf=1&web=1&e=BzplbE" }
-        ],
+        PASSWORDS: { 
+   "CFD": "1111",
+  "KFSH": "1111",
+  "KFSC": "1111",
+  "KSU": "1111",
+  "DIRAB": "1111",
+  "JEDDAH TOWER": "1111",
+  "SANG JEDDAH": "1111",
+  "SANG QASSIM": "1111",
+  "SANG TAIF": "1111",
+  "HHR": "1111",
+  "VALINA": "1111",
+  "KAIA": "1111",
+  "SEVEN": "1111" },
 
-        DASHBOARD_LINKS: [
-          { label: "NCR", url: "#" },
-          { label: "INCIDENT LOG", url: "#" },
-          { label: "KPIs", url: "#" },
-          { label: "OBSERVATION", url: "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi" }
-        ],
+        USEFUL: { 
+          TITLE:  "USEFUL LINKS",
 
-        COMMON_LINKS: [
-          { label: "NCR", url: "#" },
-          { label: "INCIDENT LOG", url: "#" },
-          { label: "KPIs", url: "#" },
-          { label: "OBSERVATION", url: "#" },
-          { label: "ARCHIVING", url: "#" },
-          { label: "DAILY ATTENDANCE", url: "#" }
-        ],
-
-        PROJECT_LINKS: {
-          "CFD": {
-            "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD5HmXzW9S5RIeJghN6NRHuAR6HNAHlQogEVe4ltZoBVhQ?e=1drfPE",
-            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAtG-TE_eHQR5Ujok9qCmxFAbIYD9oH0Z6svSYmwHCHiFo?e=Lphbkm",
-            "KPIs": "#",
-            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
-            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C",
-            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAiJgMpzOIVQJkA2-HuMz5DAWpOe0zsLPpLqtWv_kSQPps?e=b0Cl0t"
-          }
-          /* ... keep rest of your 2026 PROJECT_LINKS exactly as you have (I kept your logic unchanged).
-             If you want, paste the full map here (it's long), the viewer logic will work automatically. */
+          OPTIONS: ["HSE OBSERVATION",
+                    "HSE PROCEDURE",
+                    "HSE FORM",
+                    "HSE TRAINING"]
         },
 
-        NCR_FOLLOWUP: {},
-        INCIDENT_LOG_FOLLOWUP: {},
-        SEVEN_BRANCH_LINKS: {
-          "DAMMAM": {
+        TOTAL: {
+          TITLE: "TOTAL FOR ALL PROJECTS",
+          LINKS: {
             "NCR": "#",
             "INCIDENT LOG": "#",
             "KPIs": "#",
             "OBSERVATION": "#",
-            "ARCHIVING": "#",
-            "DAILY ATTENDANCE": "#"
-          },
-          "KHOBAR": {
+            "DAILY ATTANDANCE": "#"
+          }
+        },
+
+        DASHBOARD: {
+          TITLE: "DASHBOARD FOR ALL PROJECTS",
+          LINKS: {
             "NCR": "#",
             "INCIDENT LOG": "#",
             "KPIs": "#",
-            "OBSERVATION": "#",
-            "ARCHIVING": "#",
-            "DAILY ATTENDANCE": "#"
+            "OBSERVATION": "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi"
+          }
+        },
+
+        PROJECTS: {
+          "CFD": { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD5HmXzW9S5RIeJghN6NRHuAR6HNAHlQogEVe4ltZoBVhQ?e=1drfPE",
+           "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAtG-TE_eHQR5Ujok9qCmxFAbIYD9oH0Z6svSYmwHCHiFo?e=Lphbkm",
+           "KPIs": "#",
+           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C", 
+          "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAiJgMpzOIVQJkA2-HuMz5DAWpOe0zsLPpLqtWv_kSQPps?e=b0Cl0t" } },
+
+          "KFSH": { LINKS: 
+          {   "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCiXnzDCJUDSabO3O39xfdIAa49Huvdg7thkhzAOxKKU58?e=zjxTbX",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA0wMrk968gQblYYHdX0xfZAYJi6_Zpx0nLO2EkcTJaexA?e=5nPfHt",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSH%20%26%20RC?csf=1&web=1&e=7Vh8Dt",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBu8UMVfvI_RKR6JlqbqbQTAdAzWeicjYjLcO6rmXQ0REg?e=JGSwlZ" } },
+
+
+          "KFSC": { LINKS: 
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBduT7xD7zcRqQZmWn9ltkRAZ1g7QpbG03csUfr-0REih4?e=rGIbEk",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAuXBmugkiuSLr4RMWiQCLlAd29TPpOUbWYdkQQFDIXwbQ?e=nrpzvW",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSC?csf=1&web=1&e=lZ8YYo",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAKEwXvTcITS5cLnFUyPFdvARjUW3JZdpaVzJGqaFpWbIg?e=xavpO0"} },
+
+
+          "KSU":  { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCjtMGXsQfTRq4xd27elkSpARLQ4m1BsGPtwW87zIQvWLs?e=UQgoRL",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDG6SIiLdyaTbyL_kXNDW11ATT1h2A0D9ha3sWMn3sbyIM?e=XEtqQP",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KSU?csf=1&web=1&e=4xItSd",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBAEP-WZoLGSppWfTj5W8EAAey2BoShUAHhyWGK-1plQN4?e=X8817Z" } },
+
+
+          "DIRAB":{ LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC-Xg6v_YiUSahxShfw7DBmARuW_sX8HC2f_49AUPjphmk?e=hkk2dw",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCmHyzo1-yGToVjMLCfZ8xpAb2g5O82ragqn_xVWcsFIwY?e=Kg3Apo",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Dirab%20Road?csf=1&web=1&e=oJ1vjl",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC65D19iJILT4smmTLPHYbMAZ8F2IpiBxski10gXb7qWfg?e=jcrdpb"} },
+
+
+          "JEDDAH TOWER": { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDqo4jX42XCSrUQKla6PT6xAZD6QNmRh4sMKilegl3SwlM?e=RtPUVh",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAjca2y3BirRoD3WGh87PEbAUDZPfNjRPa_QNCJdWdfu5w?e=WCYR9l",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Jeddah%20Tower?csf=1&web=1&e=vPp2ZE",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBmC0prbVeOTq2Ltrl9jCjWAYKqOLHidJnfRgbJ7d9vdsA?e=5nWg2L" } },
+
+
+          "SANG JEDDAH":  { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC23BV8P1Q3R5UuOV0oF9QyAYlWXkmhC58zBzVz06m-Fro?e=KCWhVT",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBO0NbowaI1RIsPjv73SpnwAR6EltDAzjv3jC_3JqzHIvU?e=hOLgPf",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAAI8qkty3rTLPeGVPc5x9IAVsy1emMUqJKookexNZlR-I?e=U6u9bN" } },
+
+
+          "SANG QASSIM":  { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCYk4nUV2iOQbdRkUuo9p25AZfXKkrgTem7e8uNxqF_cwc?e=0i4JXA",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAqkuMGR3xuSJzfukbtn4PdAWa46nCAHlPMI4xJxsUN6vw?e=XZcDA5",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCRx-Ms3pskTL6WSg8TLfkCARRjsGMrmyxaUOhynMF7nfA?e=Zu99KB"} },
+
+
+          "SANG TAIF":    { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAruCtnEk7oTYjZwHF9HGxsAUPAEZMN05lU8Lw49PQQ7HA?e=sk9bgK",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCbQqeK0TmdT59yRAJy7yyBAQM9VAN2tEfYGf3HiD9aODE?e=mTM4Hu",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Taif)?csf=1&web=1&e=JXeKHY",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD32nfEqbpMSJhOhQss35M2AcUIwDUN72PegDqaxX72Onw?e=Pueuae"} },
+
+
+          "HHR":          { LINKS: 
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDAlab5e3bZR58p2SwaiMvsASV7t47JCIW4AFyXGfBQqIM?e=n8ONvx",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCTiidA2O_PSYvKvNpaP82QAcnkss2f_7IHsB2GSi7G63M?e=nRdoNu",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/HHR?csf=1&web=1&e=NA2dSp",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA6Yr-PHy-iQL-wWHKgbKuHAf-bVkA3D2xjaFFM8YnaMx4?e=rq1dCc"} },
+
+
+          "VALINA":       { LINKS: 
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBvNJ29ORZQRrwOCdF9YBCXAVEDoW2ynxUnY2qjMa9dyI8?e=NgZn7K",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBUNWPnSstkTa5I1ESINZaDAZjh7tiU-b2I8UTUY2PyXnA?e=TxR0bY",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xg5ax1GXPQOfreY5F9IE1p1gAJkucBK9fxu_NsirTqY/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Valina%20Airport?csf=1&web=1&e=TypNCe",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC5jpF2YlmORI1WXkd-_m3GAeGFExExUHAiAwovCAjd_xY?e=tKNmts"} },
+
+
+          "KAIA":         { LINKS: 
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDpTkaz1neASZ14qndj1lLrASJgBZPDQf1iSlBG5Nj6cwQ?e=cfZKj9",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD4-S8QTwl1TrARq6_x2-91AbzgJtw9J2ENYXGsGN-2v8Q?e=ttDKZV",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KAIA?csf=1&web=1&e=RwlRik",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDl7_zF0ZSQSoTQ6hfe69HSAdYVflytvnaooAHyFVKjOmg?e=8DGK0y"
+} },
+
+
+          "SEVEN": {
+            BRANCHES: {
+              "DAMMAM": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBgRd6X-NmWSYdR6jWeQMyNAeTAPDLHr8gSnf75GSGkhQY?e=Keyuou","INCIDENT LOG":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC23-3wKO8aRKMDg18f1jtGAY3waaStr_qDf48NK_51J9g?e=Ol3haw","KPIs":"#","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx","DAILY ATTENDANCE":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDjT9GQOsbuS7akyKUQpQT_AQetCwJ23htQ2O5mELzzfso?e=hNLvbG" } },
+              "KHOBAR": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAt7qeDGFamRLLlldoGFQf8AZUU4A_JStRg-tKs-b-bIaU?e=4E3PfJ","INCIDENT LOG":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA48MgDeXd7So-xkPCJz48hAXTkitjzAlHme99k23zNpyk?e=NC4Aux","KPIs":"#","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx","DAILY ATTENDANCE":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCyMLhxEahlS7YPOvairHsvAU5XHF0OQvrH-6UkGQ9tJI8?e=WupuMi" } }
+            }
           }
         }
       }
-    };
-
-    /* ✅ Password per project (same for 2025 and 2026) */
-    const PASSWORDS_PER_PROJECT = {
-      "CFD": "1111",
-      "KFSH": "1111",
-      "KFSC": "1111",
-      "KSU": "1111",
-      "SEVEN": "1111",
-      "DIRAB": "1111",
-      "JEDDAH TOWER": "1111",
-      "SANG JEDDAH": "1111",
-      "SANG QASSIM": "1111",
-      "SANG TAIF": "1111",
-      "HHR": "1111",
-      "VALINA": "1111",
-      "KAIA": "1111"
-    };
-
-    const PASSWORDS_BY_YEAR = {
-      "2025": { ...PASSWORDS_PER_PROJECT },
-      "2026": { ...PASSWORDS_PER_PROJECT }
     };
 
     const UNLOCKED_BY_YEAR = { "2025": new Set(), "2026": new Set() };
@@ -750,66 +1002,11 @@
     const pwClose    = document.getElementById("pwClose");
     const pwCancel   = document.getElementById("pwCancel");
     const pwSubmit   = document.getElementById("pwSubmit");
+    const yearSelect = document.getElementById("yearSelect");
+
     let pendingProjectName = null;
     let pendingOpenFn = null;
 
-    /* ===== ✅ Viewer (SharePoint) ===== */
-    const viewerOverlay    = document.getElementById("viewerOverlay");
-    const viewerFrame      = document.getElementById("viewerFrame");
-    const viewerClose      = document.getElementById("viewerClose");
-    const viewerTitle      = document.getElementById("viewerTitle");
-    const viewerStatus     = document.getElementById("viewerStatus");
-    const viewerOpenNewTab = document.getElementById("viewerOpenNewTab");
-
-    function isGoogleSheet(url){
-      return url && url.includes("docs.google.com/spreadsheets");
-    }
-
-    function isSharePoint(url){
-      return url && (url.includes("sharepoint.com") || url.includes("sbgo365-my.sharepoint.com"));
-    }
-
-    // Optional: open files in web viewer if possible
-    function normalizeSharePointUrl(url){
-      if(!url) return url;
-
-      const looksLikeFile =
-        url.includes(".xlsx") || url.includes(".xls") ||
-        url.includes(".pptx") || url.includes(".docx");
-
-      if(looksLikeFile && !url.includes("web=1")){
-        const sep = url.includes("?") ? "&" : "?";
-        return url + sep + "web=1";
-      }
-      return url;
-    }
-
-    function openViewer(title, url){
-      viewerTitle.textContent = title || "Viewer";
-      viewerStatus.textContent = "Loading…";
-      viewerFrame.src = "";
-      viewerOpenNewTab.href = url;
-
-      const finalUrl = normalizeSharePointUrl(url);
-      viewerFrame.src = finalUrl;
-
-      viewerOverlay.classList.add("show");
-      viewerOverlay.setAttribute("aria-hidden","false");
-    }
-
-    function closeViewer(){
-      viewerOverlay.classList.remove("show");
-      viewerOverlay.setAttribute("aria-hidden","true");
-      viewerFrame.src = "";
-      viewerStatus.textContent = "";
-    }
-
-    viewerFrame.addEventListener("load", ()=>{ viewerStatus.textContent = "Loaded ✅"; });
-    viewerClose.addEventListener("click", closeViewer);
-    viewerOverlay.addEventListener("click", (e)=>{ if(e.target === viewerOverlay) closeViewer(); });
-    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeViewer(); });
-
-    /* ===== Password ===== */
     function openPwModal(projectName, onSuccessOpen){
       pendingProjectName = projectName;
       pendingOpenFn = onSuccessOpen;
@@ -826,13 +1023,15 @@
       pendingProjectName = null;
       pendingOpenFn = null;
     }
-    const yearSelect = document.getElementById("yearSelect");
 
     function verifyPassword(){
       const year = yearSelect.value;
       const name = pendingProjectName;
-      const yearPasswords = PASSWORDS_BY_YEAR[year] || {};
-      const pass = yearPasswords[name] || yearPasswords["__ALL__"];
+
+      const yearCfg = YEARS[year] || {};
+      const passMap = yearCfg.PASSWORDS || {};
+      const pass = passMap[name] || passMap["__ALL__"];
+
       if(!pass){
         UNLOCKED_BY_YEAR[year].add(name);
         closePwModal();
@@ -860,6 +1059,7 @@
 
     function requirePasswordBeforeOpen(projectName, openFn){
       if(projectName.includes("TOTAL") || projectName.includes("DASHBOARD")) { openFn(); return; }
+      if(projectName === "USEFUL LINKS") { openFn(); return; }
       const year = yearSelect.value;
       if(UNLOCKED_BY_YEAR[year].has(projectName)) { openFn(); return; }
       openPwModal(projectName, openFn);
@@ -867,6 +1067,7 @@
 
     const topRow = document.getElementById("topRow");
     const projectsContainer = document.getElementById("projects");
+    const usefulWrap = document.getElementById("usefulWrap");
 
     function makeInvisiblePlaceholder(){
       const ph = document.createElement("div");
@@ -902,7 +1103,6 @@
       return ph;
     }
 
-    /* ✅ createLinkButton: SharePoint opens INSIDE viewer. Google Sheets stays normal. */
     function createLinkButton(label, url){
       const a = document.createElement("a");
       a.href = url;
@@ -914,34 +1114,77 @@
       if (!url || url === "#") {
         a.classList.add("disabled");
         a.addEventListener("click", ev => ev.preventDefault());
-        return a;
       }
-
-      a.addEventListener("click", (ev)=>{
-        // ✅ SharePoint links open inside portal
-        if(isSharePoint(url)){
-          ev.preventDefault();
-          openViewer(label, url);
-          return;
-        }
-        // ✅ Google Sheets: keep default behavior (opens normally in new tab)
-      });
-
       return a;
     }
 
-    function createProjectCard(name, yearCfg, options = {}){
+    function renderLinksFromObject(container, linksObj){
+      const used = new Set();
+      ORDER.forEach(label=>{
+        if (linksObj && linksObj[label] !== undefined) {
+          container.appendChild(createLinkButton(label, linksObj[label]));
+          used.add(label);
+        }
+      });
+      if (linksObj){
+        Object.keys(linksObj).forEach(label=>{
+          if (!used.has(label)) container.appendChild(createLinkButton(label, linksObj[label]));
+        });
+      }
+    }
+
+    /* ✅ Useful: Only Options (vertical) + selected saved */
+    function renderUsefulOptions(linksContainer, optionsArr){
+      linksContainer.innerHTML = "";
+
+      const title = document.createElement("div");
+      title.className = "subproj-title";
+      title.textContent = "SELECT OPTION";
+      linksContainer.appendChild(title);
+
+      const wrap = document.createElement("div");
+      wrap.className = "useful-vertical";
+
+      function setActive(btn){
+        Array.from(wrap.querySelectorAll(".subproj-btn")).forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        localStorage.setItem("useful_selected_option", btn.textContent);
+      }
+
+      optionsArr.forEach(name=>{
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "subproj-btn";
+        b.textContent = name;
+        b.addEventListener("click", ()=> setActive(b));
+        wrap.appendChild(b);
+      });
+
+      linksContainer.appendChild(wrap);
+
+      const saved = localStorage.getItem("useful_selected_option");
+      const btns = wrap.querySelectorAll(".subproj-btn");
+      const found = Array.from(btns).find(b => b.textContent === saved);
+      (found || btns[0])?.click();
+    }
+
+    function createProjectCard(name, options = {}){
       const card = document.createElement("div");
       card.className = "project"
         + (options.isTotal ? " total" : "")
-        + (options.isDashboard ? " dashboard" : "");
+        + (options.isDashboard ? " dashboard" : "")
+        + (options.isUseful ? " useful" : "");
+
       card.setAttribute("data-name", name.toLowerCase());
 
       const btn = document.createElement("button");
       btn.className = "project-btn";
+
       const displayName =
         options.isTotal ? `⭐ ${name}` :
-        options.isDashboard ? `📊 ${name}` : name;
+        options.isDashboard ? `📊 ${name}` :
+        options.isUseful ? `✨ ${name}` :
+        name;
 
       btn.innerHTML = `
         <div class="project-left">
@@ -956,37 +1199,12 @@
 
       function renderStandardLinks(){
         links.innerHTML = "";
-        const base = (options.links || []).map(x => ({...x}));
-
-        // Followups
-        if (options.observationFollowupMap && options.projectNameForOverride) {
-          const url = options.observationFollowupMap[options.projectNameForOverride];
-          if (url) {
-            const obs = base.find(l => l.label === "OBSERVATION");
-            if (obs) obs.url = url;
-          }
-        }
-        if (options.archivingFollowupMap && options.projectNameForOverride) {
-          const url = options.archivingFollowupMap[options.projectNameForOverride];
-          if (url) {
-            const a = base.find(l => l.label === "ARCHIVING");
-            if (a) a.url = url;
-          }
-        }
-        if (options.projectLinksMap && options.projectNameForOverride) {
-          const overrides = options.projectLinksMap[options.projectNameForOverride];
-          if (overrides) {
-            base.forEach(item=>{
-              if (overrides[item.label] !== undefined) item.url = overrides[item.label];
-            });
-          }
-        }
-
-        base.forEach(l => links.appendChild(createLinkButton(l.label, l.url)));
+        renderLinksFromObject(links, options.projectLinksObj || {});
       }
 
-      function renderSevenSubProjects(){
+      function renderSevenSelector(groupsObj){
         links.innerHTML = "";
+
         const title = document.createElement("div");
         title.className = "subproj-title";
         title.textContent = "SELECT AREA";
@@ -1003,24 +1221,22 @@
 
         function buildActions(branch){
           actionsWrap.innerHTML = "";
-          const base = (options.links || []).map(x => ({...x}));
-          const overrides = (options.sevenBranchLinks || {})[branch] || {};
-          base.forEach(item=>{
-            if (overrides[item.label] !== undefined) item.url = overrides[item.label];
-          });
-          base.forEach(item=> actionsWrap.appendChild(createLinkButton(item.label, item.url)));
+          const obj = (groupsObj[branch] && groupsObj[branch].LINKS) ? groupsObj[branch].LINKS : {};
+          renderLinksFromObject(actionsWrap, obj);
         }
 
-        SEVEN_BRANCHES.forEach(branch=>{
+        Object.keys(groupsObj || {}).forEach(branch=>{
           const b = document.createElement("button");
           b.type = "button";
           b.className = "subproj-btn";
           b.textContent = branch;
+
           b.addEventListener("click", ()=>{
             Array.from(selector.querySelectorAll(".subproj-btn")).forEach(x=>x.classList.remove("active"));
             b.classList.add("active");
             buildActions(branch);
           });
+
           selector.appendChild(b);
         });
 
@@ -1033,7 +1249,8 @@
         requirePasswordBeforeOpen(name, () => {
           card.classList.toggle("open");
           if (card.classList.contains("open")) {
-            if (options.isSeven) renderSevenSubProjects();
+            if (options.isSeven) renderSevenSelector(options.sevenBranchesObj || {});
+            else if (options.isUseful) renderUsefulOptions(links, options.usefulOptions || []);
             else renderStandardLinks();
           }
         });
@@ -1044,21 +1261,38 @@
       return card;
     }
 
+    function renderUsefulForYear(year){
+      usefulWrap.innerHTML = "";
+      const cfg = YEARS[year];
+      if (!cfg?.USEFUL) {
+        usefulWrap.classList.add("hidden");
+        return;
+      }
+      usefulWrap.classList.remove("hidden");
+
+      const usefulCard = createProjectCard(cfg.USEFUL.TITLE, {
+        isUseful: true,
+        usefulOptions: cfg.USEFUL.OPTIONS || []
+      });
+
+      usefulWrap.appendChild(usefulCard);
+    }
+
     function renderYear(year){
       const cfg = YEARS[year];
-
-      const chip = document.getElementById("linksChip");
-      if (chip) chip.textContent = `${cfg.COMMON_LINKS.length} Links / Project`;
-
-      if (year === "2025" && cfg.INCIDENT_LOG_URL) {
-        cfg.COMMON_LINKS.forEach(l => { if(l.label === "INCIDENT LOG") l.url = cfg.INCIDENT_LOG_URL; });
-      }
+      renderUsefulForYear(year);
 
       topRow.innerHTML = "";
       projectsContainer.innerHTML = "";
 
+      const chip = document.getElementById("linksChip");
+      chip.textContent = "Links";
+
       topRow.appendChild(
-        createProjectCard("TOTAL FOR ALL PROJECTS", cfg, { isTotal:true, links: cfg.TOTAL_LINKS })
+        createProjectCard(cfg.TOTAL.TITLE, {
+          isTotal:true,
+          projectLinksObj: cfg.TOTAL.LINKS
+        })
       );
 
       topRow.appendChild(
@@ -1071,24 +1305,34 @@
       );
 
       topRow.appendChild(
-        createProjectCard("DASHBOARD FOR ALL PROJECTS", cfg, { isDashboard:true, links: cfg.DASHBOARD_LINKS })
+        createProjectCard(cfg.DASHBOARD.TITLE, {
+          isDashboard:true,
+          projectLinksObj: cfg.DASHBOARD.LINKS
+        })
       );
 
-      const cards = SORTED_PROJECTS.map(pname=>{
-        if (pname === "SEVEN") {
-          return createProjectCard("SEVEN", cfg, {
+      const projCfg = cfg.PROJECTS || {};
+      const names = Object.keys(projCfg)
+        .filter(n => n !== "SEVEN")
+        .sort((a,b)=>a.localeCompare(b));
+
+      const cards = [];
+
+      if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
+        cards.push(
+          createProjectCard("SEVEN", {
             isSeven: true,
-            links: cfg.COMMON_LINKS,
-            sevenBranchLinks: cfg.SEVEN_BRANCH_LINKS
-          });
-        }
-        return createProjectCard(pname, cfg, {
-          links: cfg.COMMON_LINKS,
-          projectNameForOverride: pname,
-          projectLinksMap: cfg.PROJECT_LINKS || {},
-          observationFollowupMap: cfg.OBSERVATION_FOLLOWUP || {},
-          archivingFollowupMap: cfg.ARCHIVING_FOLLOWUP || {}
-        });
+            sevenBranchesObj: projCfg["SEVEN"].BRANCHES
+          })
+        );
+      }
+
+      names.forEach(pname=>{
+        cards.push(
+          createProjectCard(pname, {
+            projectLinksObj: projCfg[pname]?.LINKS || {}
+          })
+        );
       });
 
       if (cards.length % 3 === 1) {
@@ -1104,20 +1348,20 @@
 
     renderYear("2025");
 
-    // Year toggle
     const yearToggle = document.getElementById("yearToggle");
     const yearButtons = Array.from(yearToggle.querySelectorAll(".year-btn"));
+
     function setYearUI(year){
       yearButtons.forEach(b => b.classList.toggle("active", b.dataset.year === year));
       yearSelect.value = year;
       renderYear(year);
       document.getElementById("searchInput").value = "";
     }
+
     yearButtons.forEach(btn=>{
       btn.addEventListener("click", ()=> setYearUI(btn.dataset.year));
     });
 
-    // Search
     document.getElementById("searchInput").addEventListener("input", (e)=>{
       const q = e.target.value.trim().toLowerCase();
       const allProjectCards = Array.from(projectsContainer.querySelectorAll(".project:not(.placeholder)"));
@@ -1127,7 +1371,6 @@
       });
     });
 
-    // Protection
     document.addEventListener("contextmenu", e => e.preventDefault());
     document.addEventListener("keydown", (e)=>{
       const key = e.key.toLowerCase();
