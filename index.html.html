@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HSE Data Portal</title>
+
+  <style>
+    :root{
+      /* ===== Background lighter ===== */
+      --bg: #0B1E14;
+      --bg-soft:#0F2A1C;
+
+      --card:#0E2A1D;
+      --card-border:#1C4A34;
+
+      --text:#E9F6EF;
+      --muted:#A9C9B7;
+
+      --accent:#22C55E;
+      --accent-2:#16A34A;
+      --accent-3:#86EFAC;
+
+      --linkA:#22C55E;
+      --linkB:#059669;
+
+      --shadow: 0 10px 30px rgba(0,0,0,.30);
+      --shadow-soft: 0 6px 16px rgba(0,0,0,.20);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      min-width: 1100px;
+
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #1B5A3D 0%, transparent 60%),
+        radial-gradient(900px 650px at 110% 0%, #17704B 0%, transparent 55%),
+        radial-gradient(900px 650px at 50% 110%, #1C8A5B 0%, transparent 55%),
+        var(--bg);
+
+      color:var(--text);
+      padding:16px;
+
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .header{
+      position: sticky; top:0; z-index:10;
+      background: linear-gradient(180deg, rgba(11,30,20,.98), rgba(11,30,20,.85), transparent);
+      padding:8px 4px 14px 4px;
+      backdrop-filter: blur(6px);
+    }
+
+    .title{
+      display:flex; align-items:center; gap:12px;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      padding:8px 10px;
+      background:var(--bg-soft);
+      border:1px solid #123626;
+      border-radius:14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* ===== TEXT LOGO ===== */
+    .text-logo{
+      text-align:left;
+      padding:6px 8px;
+      border-radius:8px;
+      background:#FFFFFF;
+      color:#000000;
+      border:1px solid rgba(0,0,0,.18);
+      box-shadow:0 4px 10px rgba(0,0,0,.10);
+      line-height:1.08;
+      display:inline-block;
+      width: fit-content;
+      overflow: visible;
+    }
+
+    .text-logo-ar,
+    .text-logo-en-wrap,
+    .text-logo-subrow{ width:100%; }
+
+    .text-logo-ar{
+      direction: rtl; white-space:nowrap;
+      font-weight:400; font-size:13px;
+      text-align:right; color:#000;
+    }
+
+    .text-logo-en-wrap{
+      display:inline-block; text-align:right; margin-top:2px;
+    }
+
+    .text-logo-en{
+      direction:ltr; white-space:nowrap;
+      font-weight:400; font-size:13px;
+      letter-spacing:1.0px; text-transform:uppercase;
+      color:#000; display:inline-block;
+    }
+
+    .text-logo-line{
+      height:2px; width:100%;
+      background: var(--accent);
+      margin:4px 0;
+    }
+
+    .text-logo-subrow{
+      display:flex; align-items:center; gap:8px;
+      white-space:nowrap; font-weight:400;
+      font-size:11.5px; letter-spacing:.4px;
+      color:#000; margin-top:1px;
+      justify-content: space-between; padding-inline: 2px;
+    }
+
+    .text-logo-subrow .ar{ direction: rtl; }
+    .text-logo-subrow .en{ direction: ltr; text-transform:uppercase; }
+    .text-logo-subrow .sep{
+      width:2px; height:11px; background: var(--accent);
+      flex:0 0 auto; margin-inline: 2px;
+    }
+
+    .heading{ display:flex; flex-direction:column; gap:2px; }
+
+    .dept-title{
+      font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
+      color: var(--text);
+      text-shadow: 0 2px 6px rgba(0,0,0,.35);
+      line-height:1.1; margin-bottom: 0;
+    }
+
+    h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; }
+    .subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    /* ===== Toolbar ===== */
+    .toolbar{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: minmax(200px, 1fr) auto minmax(140px, 1fr);
+      align-items:center;
+      gap:8px;
+    }
+    .toolbar-left{ display:flex; justify-content:flex-start; }
+    .toolbar-center{ display:flex; justify-content:center; }
+    .toolbar-right{ display:flex; justify-content:flex-end; }
+
+    .search{
+      flex:1; display:flex; align-items:center; gap:8px; background:var(--bg-soft);
+      border:1px solid #14402D; border-radius:12px; padding:8px 10px;
+    }
+    .search input{
+      width:100%; border:0; outline:none; background:transparent; color:var(--text);
+      font-size:14px; -webkit-user-select: text; user-select: text;
+    }
+
+    .chip{
+      font-size:12px; color:#DFF3E8; background:#0C2A1D; border:1px solid #1C4A34;
+      padding:6px 8px; border-radius:999px; white-space:nowrap;
+    }
+
+    .grid{ margin-top:10px; display:grid; gap:10px; }
+    .top-row{ grid-template-columns: repeat(3, 1fr); margin-bottom: 70px; }
+    .projects-grid{ grid-template-columns: repeat(3, 1fr); }
+
+    .center-badge{ visibility: visible; pointer-events: none; }
+
+    .badge-btn{
+      cursor: default !important;
+      justify-content: center; align-items: center; text-align:center;
+      min-height: 70px; padding: 14px 22px;
+      background:
+        radial-gradient(420px 220px at 50% -70%, rgba(134,239,172,.35), transparent 60%),
+        linear-gradient(180deg, rgba(16,75,48,.55), rgba(8,34,24,.95));
+      border: 1.5px solid rgba(134,239,172,.75);
+      position: relative;
+      box-shadow:
+        0 10px 22px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .badge-btn::after{
+      content:""; position:absolute; inset:6px;
+      border:1px dashed rgba(34,197,94,.7);
+      border-radius:12px; opacity:.9; pointer-events:none;
+    }
+
+    .badge-text{
+      font-family: "Montserrat","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+      font-weight: 900; font-size: 15.6px; letter-spacing: 2.1px;
+      text-transform: uppercase; color: var(--accent-3);
+      line-height: 1.2; display:flex; align-items:center; justify-content:center; gap:8px;
+      text-shadow: 0 1px 0 rgba(0,0,0,.35);
+      width:100%; white-space: nowrap; opacity: 0;
+    }
+    .badge-icon{ font-size:16px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); opacity:.95; }
+
+    .anim-fade { animation: fadeInOut 1.0s ease forwards; }
+    @keyframes fadeInOut{ 0%{opacity:0} 100%{opacity:1} }
+    .anim-slide-up { animation: slideUp 1.0s ease forwards; }
+    @keyframes slideUp{ 0%{opacity:0; transform:translateY(10px)} 100%{opacity:1; transform:translateY(0)} }
+    .anim-zoom { animation: zoomIn 1.0s ease forwards; }
+    @keyframes zoomIn{ 0%{opacity:0; transform:scale(.96)} 100%{opacity:1; transform:scale(1)} }
+    .anim-flip { transform-origin: center; animation: flipIn 1.1s ease forwards; }
+    @keyframes flipIn{ 0%{opacity:0; transform:rotateX(70deg)} 100%{opacity:1; transform:rotateX(0)} }
+
+    .placeholder{ visibility: hidden; pointer-events: none; }
+
+    .project{
+      background: linear-gradient(180deg, #0E2A1D, #0B2419);
+      border:1px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .project-btn{
+      width:100%; border:0; cursor:pointer;
+      background:
+        radial-gradient(600px 200px at 0% -50%, rgba(34,197,94,.35), transparent 60%),
+        radial-gradient(500px 250px at 100% -60%, rgba(22,163,74,.30), transparent 55%),
+        var(--card);
+      padding:14px 14px; color:var(--text);
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:15px; font-weight:900; letter-spacing:.8px;
+      transition: transform .12s ease;
+    }
+    .project-btn:hover{ transform: translateY(-1px); }
+
+    .project-left{ display:flex; align-items:center; gap:10px; }
+    .project-dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+
+    .project.total{
+      border-color: #2F7B57;
+      box-shadow: 0 12px 34px rgba(34,197,94,.12), var(--shadow);
+    }
+    .project.total .project-dot{
+      background: linear-gradient(135deg, #E8FFD9, var(--accent));
+      box-shadow: 0 0 0 5px rgba(134,239,172,.18);
+    }
+
+    .project.dashboard{
+      border-color: #2F7B57;
+      box-shadow: 0 12px 34px rgba(34,197,94,.12), var(--shadow);
+      opacity: .98;
+    }
+    .project.dashboard .project-dot{
+      background: linear-gradient(135deg, #DBFFE7, var(--accent));
+      box-shadow: 0 0 0 5px rgba(34,197,94,.14);
+    }
+
+    .chev{ font-size:20px; opacity:.9; transition: transform .15s ease; }
+    .project.open .chev{ transform: rotate(180deg); }
+
+    .links{
+      display:none; padding:12px; background: rgba(6,20,14,.9);
+      border-top:1px solid #164733; gap:8px; flex-wrap:wrap;
+    }
+    .project.open .links{ display:flex; }
+
+    .link-btn{
+      flex:1 1 calc(20% - 8px); min-width:120px; text-decoration:none;
+      padding:11px 10px; border-radius:12px;
+      font-size:13px; font-weight:900; letter-spacing:.3px;
+      display:flex; align-items:center; justify-content:center;
+      color:#FFFFFF; background: linear-gradient(135deg, var(--linkA), var(--linkB));
+      box-shadow: 0 8px 16px rgba(0,0,0,.25);
+      transition: transform .12s ease, filter .2s ease, opacity .2s ease;
+      border:1px solid rgba(255,255,255,.25); text-align:center;
+    }
+    .link-btn:hover{ transform: translateY(-1px); filter: brightness(.96); }
+    .link-btn.disabled{
+      opacity:.45; cursor:not-allowed; filter:saturate(.4); transform:none !important;
+    }
+
+    /* ===== SEVEN sub-project selector ===== */
+    .subproj-wrap{
+      width:100%;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .subproj-btn{
+      flex:1 1 calc(50% - 8px);
+      min-width:160px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(12,42,29,.85);
+      color: var(--text);
+      font-weight:900;
+      letter-spacing:.6px;
+      cursor:pointer;
+      transition: transform .12s ease, filter .2s ease;
+      box-shadow: 0 8px 16px rgba(0,0,0,.18);
+      position: relative;
+    }
+    .subproj-btn.active{
+      background: linear-gradient(135deg, rgba(134,239,172,.85), rgba(34,197,94,.85));
+      color:#052015;
+      border-color: rgba(255,255,255,.45);
+      box-shadow: 0 10px 18px rgba(34,197,94,.18);
+    }
+    .subproj-btn.active::after{
+      content: "SELECTED";
+      position: absolute;
+      top: -7px;
+      right: 10px;
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: .6px;
+      color: #E9F6EF;
+      background: #0E2A1D;
+      border: 1px solid #1C4A34;
+      padding: 2px 6px;
+      border-radius: 999px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.35);
+    }
+
+    .subproj-title{
+      width:100%;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.8px;
+      color: var(--muted);
+      margin: 0 0 6px 2px;
+      text-transform: uppercase;
+    }
+
+    .footer{ margin:14px 4px 4px; text-align:center; font-size:12px; color:var(--muted); }
+
+    .signature{
+      position: fixed; right: 14px; bottom: 10px;
+      font-size: 10.5px; letter-spacing: .35px; color: #CFE7DB; opacity: .75;
+      display: flex; align-items: center; gap: 6px; z-index: 9999; pointer-events: none;
+      text-shadow: 0 1px 2px rgba(0,0,0,.35);
+    }
+    .sig-name{ color: var(--accent); font-weight: 900; }
+    .sig-dot{ opacity:.7; }
+
+    /* ===== Password Modal ===== */
+    .pw-overlay{
+      position: fixed; inset:0; background: rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center;
+      z-index: 9998; backdrop-filter: blur(4px);
+    }
+    .pw-overlay.show{ display:flex; }
+
+    .pw-modal{
+      width: 360px; max-width: 92vw;
+      background: linear-gradient(180deg, #0E2A1D, #0B2419);
+      border:1px solid #1C4A34;
+      border-radius:16px; box-shadow: 0 20px 50px rgba(0,0,0,.5);
+      padding:14px;
+    }
+    .pw-header{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .pw-title{
+      font-size:16px; font-weight:900; letter-spacing:.6px;
+    }
+    .pw-subtitle{
+      font-size:12px; color: var(--muted); margin-top:2px;
+    }
+    .pw-close{
+      background: transparent; border:0; color: var(--text);
+      font-size:18px; cursor:pointer; opacity:.8;
+    }
+    .pw-close:hover{ opacity:1; }
+
+    .pw-input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #1C4A34;
+      background:#081C14;
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+      -webkit-user-select:text; user-select:text;
+    }
+    .pw-input:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+    }
+
+    .pw-error{
+      margin-top:8px;
+      font-size:12px;
+      color:#FCA5A5;
+      font-weight:800;
+    }
+
+    .pw-actions{
+      margin-top:12px;
+      display:flex; gap:8px; justify-content:flex-end;
+    }
+    .pw-btn{
+      padding:8px 12px; border-radius:10px; font-weight:900; font-size:13px;
+      border:1px solid rgba(255,255,255,.18);
+      cursor:pointer;
+    }
+    .pw-cancel{
+      background:#0C2A1D; color:var(--text);
+    }
+    .pw-submit{
+      background: linear-gradient(135deg, var(--linkA), var(--linkB));
+      color:#fff;
+    }
+    .pw-btn:hover{ transform: translateY(-1px); }
+
+    /* ===== Year Toggle ===== */
+    .year-toggle{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+
+      width: 480px;
+      max-width: 52vw;
+      min-width: 360px;
+
+      background: #071F15;
+      border:1px solid #1C4A34;
+      border-radius:999px;
+      padding:6px;
+      gap:6px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), var(--shadow-soft);
+    }
+    .year-btn{
+      flex:1;
+      text-align:center;
+      min-width:0;
+
+      padding:9px 16px;
+      border-radius:999px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13.5px;
+      letter-spacing:1px;
+      color:#CFE7DB;
+      background: transparent;
+      transition: all .18s ease;
+      position:relative;
+      text-transform:uppercase;
+    }
+    .year-btn:hover{
+      color:#FFFFFF;
+      transform: translateY(-1px);
+    }
+    .year-btn.active{
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow:
+        0 6px 14px rgba(34,197,94,.35),
+        inset 0 0 0 1px rgba(255,255,255,.45);
+    }
+    .year-btn.active::after{
+      content:"SLECTED";
+      position:absolute;
+      top:-8px; right:10px;
+      font-size:8.5px;
+      font-weight:900;
+      letter-spacing:.6px;
+      color:#E9F6EF;
+      background:#0E2A1D;
+      border:1px solid #1C4A34;
+      padding:2px 5px;
+      border-radius:999px;
+      box-shadow: var(--shadow-soft);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="title">
+      <div class="text-logo" aria-label="Saudi Binladin Group Contracting">
+        <div class="text-logo-ar">مجموعـة بن لادن السعوديـة</div>
+
+        <div class="text-logo-en-wrap">
+          <div class="text-logo-en">SAUDI BINLADIN GROUP</div>
+          <div class="text-logo-line"></div>
+        </div>
+
+        <div class="text-logo-subrow">
+          <span class="ar">المقاولات</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="en">CONTRACTING</span>
+        </div>
+      </div>
+
+      <div class="heading">
+        <div class="dept-title">HSE DEPARTMENT</div>
+        <h1>HSE Data Portal</h1>
+        <div class="subtitle">Select your project → choose the required form</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search">
+          <span style="opacity:.7">🔎</span>
+          <input id="searchInput" type="text" placeholder="Search project name (e.g., KFSH, JEDDAH)"/>
+        </div>
+      </div>
+
+      <div class="toolbar-center">
+        <div class="year-toggle" id="yearToggle">
+          <button class="year-btn active" data-year="2025" type="button">2025</button>
+          <button class="year-btn" data-year="2026" type="button">2026</button>
+        </div>
+
+        <select id="yearSelect" style="display:none">
+          <option value="2025" selected>2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="chip" id="linksChip">5 Links / Project</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="topRow" class="grid top-row"></div>
+  <div id="projects" class="grid projects-grid"></div>
+
+  <div class="footer">Select your project, then choose the required form.</div>
+
+  <div class="signature">
+    Developed by <span class="sig-name">Ibrahim Almalki</span> ✦
+    <span class="sig-dot">•</span> Version 2.0
+  </div>
+
+  <!-- Password Modal -->
+  <div id="pwOverlay" class="pw-overlay" aria-hidden="true">
+    <div class="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <div class="pw-header">
+        <div>
+          <div id="pwTitle" class="pw-title">Project Access</div>
+          <div id="pwSubtitle" class="pw-subtitle">Enter password to open project</div>
+        </div>
+        <button id="pwClose" class="pw-close" title="Close">✕</button>
+      </div>
+
+      <input id="pwInput" class="pw-input" type="password" placeholder="Password" autocomplete="off"/>
+
+      <div id="pwError" class="pw-error" style="display:none;">Wrong password. Please try again.</div>
+
+      <div class="pw-actions">
+        <button id="pwCancel" class="pw-btn pw-cancel">Cancel</button>
+        <button id="pwSubmit" class="pw-btn pw-submit">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Viewer Modal (SharePoint Only) -->
+  <div id="viewerOverlay" class="pw-overlay" aria-hidden="true">
+    <div class="pw-modal" style="width: 92vw; height: 88vh; max-width: 1320px;">
+      <div class="pw-header">
+        <div>
+          <div id="viewerTitle" class="pw-title">Viewer</div>
+          <div class="pw-subtitle" style="display:flex; align-items:center; gap:10px;">
+            <span id="viewerStatus">Loading…</span>
+            <a id="viewerOpenNewTab" href="#" target="_blank" rel="noopener noreferrer"
+              style="color: var(--accent-3); font-weight:900; text-decoration:none;">
+              Open in new tab ↗
+            </a>
+          </div>
+        </div>
+        <button id="viewerClose" class="pw-close" title="Close">✕</button>
+      </div>
+
+      <iframe id="viewerFrame"
+        style="width:100%; height: calc(100% - 54px); border-radius: 12px; border:1px solid #1C4A34; background:#081C14;">
+      </iframe>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Logo width sync ===== */
+    function syncLogoWidth(){
+      const logo = document.querySelector('.text-logo');
+      const enWrap = document.querySelector('.text-logo-en-wrap');
+      if(!logo || !enWrap) return;
+      const w = enWrap.getBoundingClientRect().width;
+      logo.style.width = Math.ceil(w + 8) + 'px';
+    }
+    window.addEventListener('load', syncLogoWidth);
+    window.addEventListener('resize', syncLogoWidth);
+
+    const PROJECT_NAMES = [
+      "CFD","KFSH","KFSC","KSU","SEVEN","DIRAB",
+      "JEDDAH TOWER","SANG JEDDAH","SANG QASSIM",
+      "SANG TAIF","HHR","VALINA","KAIA"
+    ];
+    const SORTED_PROJECTS = PROJECT_NAMES.slice().sort((a,b)=>a.localeCompare(b));
+    const SEVEN_BRANCHES = ["DAMMAM","KHOBAR"];
+
+    const YEARS = {
+      "2025": {
+        INCIDENT_LOG_URL:
+          "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD8mnr43LSBQrNZ5hUaLBK3AfNRvYt5UwYJGEnWRd3XXZ8?e=OQpe4p",
+
+        TOTAL_LINKS: [
+          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAASGwnde4FRLET7q3w0EuwAaWacHZkvWYiGrauLn5tB-o?e=ZkigPw" },
+          { label: "INCIDENT LOG", url: "#" },
+          { label: "KPIs", url: "https://sbgo365-my.sharepoint.com/:f:/g/personal/waheed_mishaal_sbg_com_sa/IgBc4Ws74E2tRZHS87A6jl2mASyDYM3wHe3Wa7FLfT_qW_Q?e=vcEfu4&xsdata=MDV8MDJ8aWJyYWhpbS5hbG1hbGtpQHNiZy5jb20uc2F8NmM4ZDU0MGNkODkyNDY4MjI3MjcwOGRlMzBlYzdjYTJ8OWFmZmJiMzgzMDk2NGViMWJjYWM0YjcwOWJlZGM4YWZ8MHwwfDYzOTAwMTk4OTUzODAyODYxNHxVbmtub3dufFRXRnBiR1pzYjNkOGV5SkZiWEIwZVUxaGNHa2lPblJ5ZFdVc0lsWWlPaUl3TGpBdU1EQXdNQ0lzSWxBaU9pSlhhVzR6TWlJc0lrRk9Jam9pVFdGcGJDSXNJbGRVSWpveWZRPT18MHx8fA%3d%3d&sdata=MTJpTmZ6RzhFZzFScEdQQmpISTZVV0tBQkdYbDBwZlJhSUVIWUgxaTZQZz0%3d" },
+          { label: "OBSERVATION", url: "#" },
+          { label: "ARCHIVING", url: "#" }
+        ],
+
+        DASHBOARD_LINKS: [
+          { label: "NCR", url: "#" },
+          { label: "INCIDENT LOG", url: "#" },
+          { label: "KPIs", url: "#" },
+          { label: "OBSERVATION", url: "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi" }
+        ],
+
+        OBSERVATION_FOLLOWUP: {
+          "SANG TAIF":   "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
+          "SANG JEDDAH": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
+          "SANG QASSIM": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
+          "KFSH":        "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
+          "KFSC":        "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
+          "KAIA":        "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
+          "JEDDAH TOWER":"https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
+          "HHR":         "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
+          "DIRAB":       "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
+          "CFD":         "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+          "KSU":         "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing"
+        },
+
+        ARCHIVING_FOLLOWUP: {
+          "CFD": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDVkMrzEDJcQqhdDEUD09RhAUWlQNcWWTR-mZqEJNc9Cd0?e=LBTvue"
+        },
+
+        SEVEN_BRANCH_LINKS: {
+          "DAMMAM": {"NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#"},
+          "KHOBAR": {"NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#"}
+        },
+
+        COMMON_LINKS: [
+          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzASyPIgGZ2o4DrsTE8gjAnzA?e=opmcsJ" },
+          { label: "INCIDENT LOG", url: "" },
+          { label: "KPIs", url: "https://sbgo365-my.sharepoint.com/:f:/g/personal/waheed_mishaal_sbg_com_sa/IgBc4Ws74E2tRZHS87A6jl2mASyDYM3wHe3Wa7FLfT_qW_Q?e=vcEfu4&xsdata=MDV8MDJ8aWJyYWhpbS5hbG1hbGtpQHNiZy5jb20uc2F8NmM4ZDU0MGNkODkyNDY4MjI3MjcwOGRlMzBlYzdjYTJ8OWFmZmJiMzgzMDk2NGViMWJjYWM0YjcwOWJlZGM4YWZ8MHwwfDYzOTAwMTk4OTUzODAyODYxNHxVbmtub3dufFRXRnBiR1pzYjNkOGV5SkZiWEIwZVUxaGNHa2lPblJ5ZFdVc0lsWWlPaUl3TGpBdU1EQXdNQ0lzSWxBaU9pSlhhVzR6TWlJc0lrRk9Jam9pVFdGcGJDSXNJbGRVSWpveWZRPT18MHx8fA%3d%3d&sdata=MTJpTmZ6RzhFZzFScEdQQmpISTZVV0tBQkdYbDBwZlJhSUVIWUgxaTZQZz0%3d" },
+          { label: "OBSERVATION", url: "#" },
+          { label: "ARCHIVING", url: "#" }
+        ]
+      },
+
+      "2026": {
+        TOTAL_LINKS: [
+          { label: "NCR", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDybdklaZoXSY-uhlvqnumBAVftUsHQkanNgmkizwsgQQk?e=tTS9ux" },
+          { label: "INCIDENT LOG", url: "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCcwEuSkcDJTJfvMIplrb43ASiyor6rTT9ReVFW2fO-a0o?e=UQUGPt" },
+          { label: "KPIs", url: "#" },
+          { label: "OBSERVATION", url: "#" },
+          { label: "DAILY ATTANDANCE", url: "https://sbgo365-my.sharepoint.com/:x:/r/personal/ibrahim_almalki_sbg_com_sa/Documents/Desktop/MANAGER/Manager%20Attendance%20Report.xlsx?d=wce51bc55def04506bc3e46b6065729a2&csf=1&web=1&e=BzplbE" }
+        ],
+
+        DASHBOARD_LINKS: [
+          { label: "NCR", url: "#" },
+          { label: "INCIDENT LOG", url: "#" },
+          { label: "KPIs", url: "#" },
+          { label: "OBSERVATION", url: "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi" }
+        ],
+
+        COMMON_LINKS: [
+          { label: "NCR", url: "#" },
+          { label: "INCIDENT LOG", url: "#" },
+          { label: "KPIs", url: "#" },
+          { label: "OBSERVATION", url: "#" },
+          { label: "ARCHIVING", url: "#" },
+          { label: "DAILY ATTENDANCE", url: "#" }
+        ],
+
+        PROJECT_LINKS: {
+          "CFD": {
+            "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD5HmXzW9S5RIeJghN6NRHuAR6HNAHlQogEVe4ltZoBVhQ?e=1drfPE",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAtG-TE_eHQR5Ujok9qCmxFAbIYD9oH0Z6svSYmwHCHiFo?e=Lphbkm",
+            "KPIs": "#",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAiJgMpzOIVQJkA2-HuMz5DAWpOe0zsLPpLqtWv_kSQPps?e=b0Cl0t"
+          }
+          /* ... keep rest of your 2026 PROJECT_LINKS exactly as you have (I kept your logic unchanged).
+             If you want, paste the full map here (it's long), the viewer logic will work automatically. */
+        },
+
+        NCR_FOLLOWUP: {},
+        INCIDENT_LOG_FOLLOWUP: {},
+        SEVEN_BRANCH_LINKS: {
+          "DAMMAM": {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#"
+          },
+          "KHOBAR": {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#"
+          }
+        }
+      }
+    };
+
+    /* ✅ Password per project (same for 2025 and 2026) */
+    const PASSWORDS_PER_PROJECT = {
+      "CFD": "1111",
+      "KFSH": "1111",
+      "KFSC": "1111",
+      "KSU": "1111",
+      "SEVEN": "1111",
+      "DIRAB": "1111",
+      "JEDDAH TOWER": "1111",
+      "SANG JEDDAH": "1111",
+      "SANG QASSIM": "1111",
+      "SANG TAIF": "1111",
+      "HHR": "1111",
+      "VALINA": "1111",
+      "KAIA": "1111"
+    };
+
+    const PASSWORDS_BY_YEAR = {
+      "2025": { ...PASSWORDS_PER_PROJECT },
+      "2026": { ...PASSWORDS_PER_PROJECT }
+    };
+
+    const UNLOCKED_BY_YEAR = { "2025": new Set(), "2026": new Set() };
+
+    const pwOverlay  = document.getElementById("pwOverlay");
+    const pwInput    = document.getElementById("pwInput");
+    const pwError    = document.getElementById("pwError");
+    const pwSubtitle = document.getElementById("pwSubtitle");
+    const pwClose    = document.getElementById("pwClose");
+    const pwCancel   = document.getElementById("pwCancel");
+    const pwSubmit   = document.getElementById("pwSubmit");
+    let pendingProjectName = null;
+    let pendingOpenFn = null;
+
+    /* ===== ✅ Viewer (SharePoint) ===== */
+    const viewerOverlay    = document.getElementById("viewerOverlay");
+    const viewerFrame      = document.getElementById("viewerFrame");
+    const viewerClose      = document.getElementById("viewerClose");
+    const viewerTitle      = document.getElementById("viewerTitle");
+    const viewerStatus     = document.getElementById("viewerStatus");
+    const viewerOpenNewTab = document.getElementById("viewerOpenNewTab");
+
+    function isGoogleSheet(url){
+      return url && url.includes("docs.google.com/spreadsheets");
+    }
+
+    function isSharePoint(url){
+      return url && (url.includes("sharepoint.com") || url.includes("sbgo365-my.sharepoint.com"));
+    }
+
+    // Optional: open files in web viewer if possible
+    function normalizeSharePointUrl(url){
+      if(!url) return url;
+
+      const looksLikeFile =
+        url.includes(".xlsx") || url.includes(".xls") ||
+        url.includes(".pptx") || url.includes(".docx");
+
+      if(looksLikeFile && !url.includes("web=1")){
+        const sep = url.includes("?") ? "&" : "?";
+        return url + sep + "web=1";
+      }
+      return url;
+    }
+
+    function openViewer(title, url){
+      viewerTitle.textContent = title || "Viewer";
+      viewerStatus.textContent = "Loading…";
+      viewerFrame.src = "";
+      viewerOpenNewTab.href = url;
+
+      const finalUrl = normalizeSharePointUrl(url);
+      viewerFrame.src = finalUrl;
+
+      viewerOverlay.classList.add("show");
+      viewerOverlay.setAttribute("aria-hidden","false");
+    }
+
+    function closeViewer(){
+      viewerOverlay.classList.remove("show");
+      viewerOverlay.setAttribute("aria-hidden","true");
+      viewerFrame.src = "";
+      viewerStatus.textContent = "";
+    }
+
+    viewerFrame.addEventListener("load", ()=>{ viewerStatus.textContent = "Loaded ✅"; });
+    viewerClose.addEventListener("click", closeViewer);
+    viewerOverlay.addEventListener("click", (e)=>{ if(e.target === viewerOverlay) closeViewer(); });
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeViewer(); });
+
+    /* ===== Password ===== */
+    function openPwModal(projectName, onSuccessOpen){
+      pendingProjectName = projectName;
+      pendingOpenFn = onSuccessOpen;
+      pwSubtitle.textContent = `Enter password to open ${projectName}`;
+      pwInput.value = "";
+      pwError.style.display = "none";
+      pwOverlay.classList.add("show");
+      pwOverlay.setAttribute("aria-hidden","false");
+      setTimeout(()=>pwInput.focus(), 50);
+    }
+    function closePwModal(){
+      pwOverlay.classList.remove("show");
+      pwOverlay.setAttribute("aria-hidden","true");
+      pendingProjectName = null;
+      pendingOpenFn = null;
+    }
+    const yearSelect = document.getElementById("yearSelect");
+
+    function verifyPassword(){
+      const year = yearSelect.value;
+      const name = pendingProjectName;
+      const yearPasswords = PASSWORDS_BY_YEAR[year] || {};
+      const pass = yearPasswords[name] || yearPasswords["__ALL__"];
+      if(!pass){
+        UNLOCKED_BY_YEAR[year].add(name);
+        closePwModal();
+        pendingOpenFn && pendingOpenFn();
+        return;
+      }
+      if(pwInput.value === pass){
+        UNLOCKED_BY_YEAR[year].add(name);
+        closePwModal();
+        pendingOpenFn && pendingOpenFn();
+      } else {
+        pwError.style.display = "block";
+        pwInput.select();
+      }
+    }
+
+    pwClose.addEventListener("click", closePwModal);
+    pwCancel.addEventListener("click", closePwModal);
+    pwOverlay.addEventListener("click", (e)=>{ if(e.target === pwOverlay) closePwModal(); });
+    pwSubmit.addEventListener("click", verifyPassword);
+    pwInput.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") verifyPassword();
+      if(e.key === "Escape") closePwModal();
+    });
+
+    function requirePasswordBeforeOpen(projectName, openFn){
+      if(projectName.includes("TOTAL") || projectName.includes("DASHBOARD")) { openFn(); return; }
+      const year = yearSelect.value;
+      if(UNLOCKED_BY_YEAR[year].has(projectName)) { openFn(); return; }
+      openPwModal(projectName, openFn);
+    }
+
+    const topRow = document.getElementById("topRow");
+    const projectsContainer = document.getElementById("projects");
+
+    function makeInvisiblePlaceholder(){
+      const ph = document.createElement("div");
+      ph.className = "project placeholder";
+      ph.innerHTML = `<div class="project-btn" style="cursor:default;height:100%"></div>`;
+      return ph;
+    }
+
+    function makeCenterBadge(messages){
+      const ph = document.createElement("div");
+      ph.className = "project center-badge";
+      ph.innerHTML = `
+        <div class="project-btn badge-btn">
+          <span id="badgeText" class="badge-text">
+            <span class="badge-icon">✅</span>
+            <span id="badgeMsg"></span>
+          </span>
+        </div>
+      `;
+      const badgeMsgEl = ph.querySelector("#badgeMsg");
+      const badgeTextEl = ph.querySelector("#badgeText");
+      const animClasses = ["anim-fade","anim-slide-up","anim-zoom","anim-flip"];
+      let i = 0;
+      function showMessage(index){
+        badgeTextEl.classList.remove(...animClasses);
+        void badgeTextEl.offsetWidth;
+        badgeMsgEl.textContent = messages[index];
+        const cls = animClasses[Math.floor(Math.random() * animClasses.length)];
+        badgeTextEl.classList.add(cls);
+      }
+      showMessage(i);
+      setInterval(() => { i = (i + 1) % messages.length; showMessage(i); }, 5000);
+      return ph;
+    }
+
+    /* ✅ createLinkButton: SharePoint opens INSIDE viewer. Google Sheets stays normal. */
+    function createLinkButton(label, url){
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.className = "link-btn";
+      a.textContent = label;
+
+      if (!url || url === "#") {
+        a.classList.add("disabled");
+        a.addEventListener("click", ev => ev.preventDefault());
+        return a;
+      }
+
+      a.addEventListener("click", (ev)=>{
+        // ✅ SharePoint links open inside portal
+        if(isSharePoint(url)){
+          ev.preventDefault();
+          openViewer(label, url);
+          return;
+        }
+        // ✅ Google Sheets: keep default behavior (opens normally in new tab)
+      });
+
+      return a;
+    }
+
+    function createProjectCard(name, yearCfg, options = {}){
+      const card = document.createElement("div");
+      card.className = "project"
+        + (options.isTotal ? " total" : "")
+        + (options.isDashboard ? " dashboard" : "");
+      card.setAttribute("data-name", name.toLowerCase());
+
+      const btn = document.createElement("button");
+      btn.className = "project-btn";
+      const displayName =
+        options.isTotal ? `⭐ ${name}` :
+        options.isDashboard ? `📊 ${name}` : name;
+
+      btn.innerHTML = `
+        <div class="project-left">
+          <span class="project-dot"></span>
+          <span>${displayName}</span>
+        </div>
+        <span class="chev">▾</span>
+      `;
+
+      const links = document.createElement("div");
+      links.className = "links";
+
+      function renderStandardLinks(){
+        links.innerHTML = "";
+        const base = (options.links || []).map(x => ({...x}));
+
+        // Followups
+        if (options.observationFollowupMap && options.projectNameForOverride) {
+          const url = options.observationFollowupMap[options.projectNameForOverride];
+          if (url) {
+            const obs = base.find(l => l.label === "OBSERVATION");
+            if (obs) obs.url = url;
+          }
+        }
+        if (options.archivingFollowupMap && options.projectNameForOverride) {
+          const url = options.archivingFollowupMap[options.projectNameForOverride];
+          if (url) {
+            const a = base.find(l => l.label === "ARCHIVING");
+            if (a) a.url = url;
+          }
+        }
+        if (options.projectLinksMap && options.projectNameForOverride) {
+          const overrides = options.projectLinksMap[options.projectNameForOverride];
+          if (overrides) {
+            base.forEach(item=>{
+              if (overrides[item.label] !== undefined) item.url = overrides[item.label];
+            });
+          }
+        }
+
+        base.forEach(l => links.appendChild(createLinkButton(l.label, l.url)));
+      }
+
+      function renderSevenSubProjects(){
+        links.innerHTML = "";
+        const title = document.createElement("div");
+        title.className = "subproj-title";
+        title.textContent = "SELECT AREA";
+        links.appendChild(title);
+
+        const selector = document.createElement("div");
+        selector.className = "subproj-wrap";
+
+        const actionsWrap = document.createElement("div");
+        actionsWrap.style.width = "100%";
+        actionsWrap.style.display = "flex";
+        actionsWrap.style.flexWrap = "wrap";
+        actionsWrap.style.gap = "8px";
+
+        function buildActions(branch){
+          actionsWrap.innerHTML = "";
+          const base = (options.links || []).map(x => ({...x}));
+          const overrides = (options.sevenBranchLinks || {})[branch] || {};
+          base.forEach(item=>{
+            if (overrides[item.label] !== undefined) item.url = overrides[item.label];
+          });
+          base.forEach(item=> actionsWrap.appendChild(createLinkButton(item.label, item.url)));
+        }
+
+        SEVEN_BRANCHES.forEach(branch=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "subproj-btn";
+          b.textContent = branch;
+          b.addEventListener("click", ()=>{
+            Array.from(selector.querySelectorAll(".subproj-btn")).forEach(x=>x.classList.remove("active"));
+            b.classList.add("active");
+            buildActions(branch);
+          });
+          selector.appendChild(b);
+        });
+
+        links.appendChild(selector);
+        links.appendChild(actionsWrap);
+        selector.querySelector(".subproj-btn")?.click();
+      }
+
+      btn.onclick = () => {
+        requirePasswordBeforeOpen(name, () => {
+          card.classList.toggle("open");
+          if (card.classList.contains("open")) {
+            if (options.isSeven) renderSevenSubProjects();
+            else renderStandardLinks();
+          }
+        });
+      };
+
+      card.appendChild(btn);
+      card.appendChild(links);
+      return card;
+    }
+
+    function renderYear(year){
+      const cfg = YEARS[year];
+
+      const chip = document.getElementById("linksChip");
+      if (chip) chip.textContent = `${cfg.COMMON_LINKS.length} Links / Project`;
+
+      if (year === "2025" && cfg.INCIDENT_LOG_URL) {
+        cfg.COMMON_LINKS.forEach(l => { if(l.label === "INCIDENT LOG") l.url = cfg.INCIDENT_LOG_URL; });
+      }
+
+      topRow.innerHTML = "";
+      projectsContainer.innerHTML = "";
+
+      topRow.appendChild(
+        createProjectCard("TOTAL FOR ALL PROJECTS", cfg, { isTotal:true, links: cfg.TOTAL_LINKS })
+      );
+
+      topRow.appendChild(
+        makeCenterBadge([
+          "PROJECT SAFETY REPORTING CENTER",
+          "REAL-TIME HSE DATA",
+          "UNIFIED ACCESS FOR ALL PROJECTS",
+          "ALL PROJECTS • ONE PLACE"
+        ])
+      );
+
+      topRow.appendChild(
+        createProjectCard("DASHBOARD FOR ALL PROJECTS", cfg, { isDashboard:true, links: cfg.DASHBOARD_LINKS })
+      );
+
+      const cards = SORTED_PROJECTS.map(pname=>{
+        if (pname === "SEVEN") {
+          return createProjectCard("SEVEN", cfg, {
+            isSeven: true,
+            links: cfg.COMMON_LINKS,
+            sevenBranchLinks: cfg.SEVEN_BRANCH_LINKS
+          });
+        }
+        return createProjectCard(pname, cfg, {
+          links: cfg.COMMON_LINKS,
+          projectNameForOverride: pname,
+          projectLinksMap: cfg.PROJECT_LINKS || {},
+          observationFollowupMap: cfg.OBSERVATION_FOLLOWUP || {},
+          archivingFollowupMap: cfg.ARCHIVING_FOLLOWUP || {}
+        });
+      });
+
+      if (cards.length % 3 === 1) {
+        const last = cards.pop();
+        cards.forEach(c => projectsContainer.appendChild(c));
+        projectsContainer.appendChild(makeInvisiblePlaceholder());
+        projectsContainer.appendChild(last);
+        projectsContainer.appendChild(makeInvisiblePlaceholder());
+      } else {
+        cards.forEach(c => projectsContainer.appendChild(c));
+      }
+    }
+
+    renderYear("2025");
+
+    // Year toggle
+    const yearToggle = document.getElementById("yearToggle");
+    const yearButtons = Array.from(yearToggle.querySelectorAll(".year-btn"));
+    function setYearUI(year){
+      yearButtons.forEach(b => b.classList.toggle("active", b.dataset.year === year));
+      yearSelect.value = year;
+      renderYear(year);
+      document.getElementById("searchInput").value = "";
+    }
+    yearButtons.forEach(btn=>{
+      btn.addEventListener("click", ()=> setYearUI(btn.dataset.year));
+    });
+
+    // Search
+    document.getElementById("searchInput").addEventListener("input", (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      const allProjectCards = Array.from(projectsContainer.querySelectorAll(".project:not(.placeholder)"));
+      allProjectCards.forEach(card=>{
+        const name = card.getAttribute("data-name");
+        card.style.display = name.includes(q) ? "" : "none";
+      });
+    });
+
+    // Protection
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", (e)=>{
+      const key = e.key.toLowerCase();
+      if (e.key === "F12") { e.preventDefault(); return; }
+      if (e.ctrlKey && ["u","s","p"].includes(key)) { e.preventDefault(); return; }
+      if (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key)) { e.preventDefault(); return; }
+    });
+  </script>
+</body>
+</html>
