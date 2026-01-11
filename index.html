@@ -66,7 +66,7 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* ===== TEXT LOGO ===== */
+ 
     .text-logo{
       text-align:left;
       padding:6px 8px;
@@ -135,7 +135,7 @@
     h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; }
     .subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
 
-    /* ===== Toolbar ===== */
+
     .toolbar{
       margin-top:10px;
       display:grid;
@@ -280,8 +280,7 @@
     .link-btn.disabled{
       opacity:.45; cursor:not-allowed; filter:saturate(.4); transform:none !important;
     }
-
-    /* ===== Subproject buttons ===== */
+ 
     .subproj-wrap{
       width:100%;
       display:flex;
@@ -349,7 +348,7 @@
     .sig-name{ color: var(--accent); font-weight: 900; }
     .sig-dot{ opacity:.7; }
 
-    /* ===== Password Modal ===== */
+ 
     .pw-overlay{
       position: fixed; inset:0; background: rgba(0,0,0,.55);
       display:none; align-items:center; justify-content:center;
@@ -421,7 +420,7 @@
     }
     .pw-btn:hover{ transform: translateY(-1px); }
 
-    /* ===== Year Toggle ===== */
+
     .year-toggle{
       display:flex;
       justify-content: space-between;
@@ -482,7 +481,7 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* ===== Page Toggle (الحرمين / غير الحرمين) ===== */
+
     .page-toggle{
       display:flex;
       justify-content: space-between;
@@ -547,12 +546,11 @@
       box-shadow: var(--shadow-soft);
     }
 
-    /* صفحات المحتوى */
+
     .page{ display:none; }
     .page.show{ display:block; }
 
-    /* ✅ Useful Links fixed bottom-left */
-    .useful-wrap{
+      .useful-wrap{
       position: fixed;
       left: 14px;
       bottom: 12px;
@@ -633,7 +631,6 @@
       pointer-events:none;
     }
 
-    /* ✅ Useful options vertical */
     .useful-vertical{
       display:flex;
       flex-direction:column;
@@ -677,15 +674,15 @@
       <div class="toolbar-left">
         <div class="search">
           <span style="opacity:.7">🔎</span>
-          <input id="searchInput" type="text" placeholder="Search project name (e.g., KFSH, JEDDAH)"/>
+          <input id="searchInput" type="text" placeholder="Search project name "/>
         </div>
       </div>
 
       <div class="toolbar-center" style="flex-direction:column; gap:8px;">
         <!-- Page Toggle -->
         <div class="page-toggle" id="pageToggle">
-          <button class="page-btn active" data-page="nonharamain" type="button">غير الحرمين</button>
-          <button class="page-btn" data-page="haramain" type="button">الحرمين</button>
+          <button class="page-btn active" data-page="nonharamain" type="button">Non Haramain</button>
+          <button class="page-btn" data-page="haramain" type="button">Haramain</button>
         </div>
 
         <!-- Year Toggle -->
@@ -706,18 +703,18 @@
     </div>
   </div>
 
-  <!-- ===== NON-HARAMAIN PAGE (الكود الحالي) ===== -->
+  <!-- ===== NON HARAMAIN ===== -->
   <section id="pageNonHaramain" class="page show">
     <div id="topRow" class="grid top-row"></div>
     <div id="projects" class="grid projects-grid"></div>
     <div class="footer">Select your project, then choose the required form.</div>
   </section>
 
-  <!-- ===== HARAMAIN PAGE (Placeholder الآن) ===== -->
+  <!-- ===== HARAMAIN ===== -->
   <section id="pageHaramain" class="page">
     <div id="haramainTopRow" class="grid top-row"></div>
     <div id="haramainProjects" class="grid projects-grid"></div>
-    <div class="footer">Haramain portal (content will be added later).</div>
+    <div class="footer">Select your project, then choose the required form.</div>
   </section>
 
   <div class="signature">
@@ -725,7 +722,7 @@
     <span class="sig-dot">•</span> Version 2.0
   </div>
 
-  <!-- Useful Links (2026 only) -->
+  <!-- Useful Links (Non Haramain 2026 only) -->
   <div id="usefulWrap" class="useful-wrap hidden"></div>
 
   <!-- Password Modal -->
@@ -750,7 +747,7 @@
   </div>
 
   <script>
-    /* ===== Logo width sync ===== */
+   
     function syncLogoWidth(){
       const logo = document.querySelector('.text-logo');
       const enWrap = document.querySelector('.text-logo-en-wrap');
@@ -762,6 +759,7 @@
     window.addEventListener('resize', syncLogoWidth);
 
     const ORDER = ["NCR","INCIDENT LOG","KPIs","OBSERVATION","ARCHIVING","DAILY ATTENDANCE","DAILY ATTANDANCE"];
+
 
     const YEARS = {
       "2025": {
@@ -852,7 +850,7 @@
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal" } },
 
           "SANG QASSIM":  { LINKS:
-          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalkي_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBDjzwtRUprQp5271jTTMv3AfO52njAX7lDzopFnPfh-fs?e=1j6H1D",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
@@ -1046,7 +1044,64 @@
       }
     };
 
-    const UNLOCKED_BY_YEAR = { "2025": new Set(), "2026": new Set() };
+   
+    function haramainProjectLinksPlaceholder(){
+      return { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#","DAILY ATTENDANCE":"#" };
+    }
+
+    const HARAMAIN_YEARS = {
+      "2025": {
+        PASSWORDS: {
+          // Optional: "__ALL__": "1111"
+        },
+        TOTAL: {
+          TITLE: "TOTAL FOR HARAMAIN PROJECTS",
+          LINKS: haramainProjectLinksPlaceholder()
+        },
+        DASHBOARD: {
+          TITLE: "HARAMAIN DASHBOARD",
+          LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#" }
+        },
+        PROJECTS: {
+          "Haram building (HB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "Piazza": { LINKS: haramainProjectLinksPlaceholder() },
+          "Service building (SVB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "Pedestrian Tunnels": { LINKS: haramainProjectLinksPlaceholder() },
+          "CUC": { LINKS: haramainProjectLinksPlaceholder() },
+          "MARWA BRIDGE": { LINKS: haramainProjectLinksPlaceholder() },
+          "MATAF": { LINKS: haramainProjectLinksPlaceholder() }
+        }
+      },
+
+      "2026": {
+        PASSWORDS: {
+          // Optional: "__ALL__": "1111"
+        },
+        TOTAL: {
+          TITLE: "TOTAL FOR HARAMAIN PROJECTS",
+          LINKS: haramainProjectLinksPlaceholder()
+        },
+        DASHBOARD: {
+          TITLE: "HARAMAIN DASHBOARD",
+          LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#" }
+        },
+        PROJECTS: {
+          "Haram building (HB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "PIAZZA": { LINKS: haramainProjectLinksPlaceholder() },
+          "Service building (SVB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "Pedestrian Tunnels": { LINKS: haramainProjectLinksPlaceholder() },
+          "CUC": { LINKS: haramainProjectLinksPlaceholder() },
+          "MARWA BRIDGE": { LINKS: haramainProjectLinksPlaceholder() },
+          "MATAF": { LINKS: haramainProjectLinksPlaceholder() }
+        }
+      }
+    };
+
+  
+    const UNLOCKED_BY_SCOPE = {
+      nonharamain: { "2025": new Set(), "2026": new Set() },
+      haramain:    { "2025": new Set(), "2026": new Set() }
+    };
 
     const pwOverlay  = document.getElementById("pwOverlay");
     const pwInput    = document.getElementById("pwInput");
@@ -1057,6 +1112,18 @@
     const pwSubmit   = document.getElementById("pwSubmit");
     const yearSelect = document.getElementById("yearSelect");
 
+
+    const pageNonHaramain = document.getElementById("pageNonHaramain");
+    const pageHaramain    = document.getElementById("pageHaramain");
+
+    const topRow = document.getElementById("topRow");
+    const projectsContainer = document.getElementById("projects");
+    const usefulWrap = document.getElementById("usefulWrap");
+
+    const haramainTopRow = document.getElementById("haramainTopRow");
+    const haramainProjects = document.getElementById("haramainProjects");
+
+    let CURRENT_PAGE = "nonharamain"; // "nonharamain" | "haramain"
     let pendingProjectName = null;
     let pendingOpenFn = null;
 
@@ -1080,19 +1147,26 @@
     function verifyPassword(){
       const year = yearSelect.value;
       const name = pendingProjectName;
+      const scope = CURRENT_PAGE;
 
-      const yearCfg = YEARS[year] || {};
-      const passMap = yearCfg.PASSWORDS || {};
+      let passMap = {};
+      if (scope === "nonharamain"){
+        passMap = (YEARS[year] || {}).PASSWORDS || {};
+      } else {
+        passMap = (HARAMAIN_YEARS[year] || {}).PASSWORDS || {};
+      }
+
       const pass = passMap[name] || passMap["__ALL__"];
 
       if(!pass){
-        UNLOCKED_BY_YEAR[year].add(name);
+        UNLOCKED_BY_SCOPE[scope][year].add(name);
         closePwModal();
         pendingOpenFn && pendingOpenFn();
         return;
       }
+
       if(pwInput.value === pass){
-        UNLOCKED_BY_YEAR[year].add(name);
+        UNLOCKED_BY_SCOPE[scope][year].add(name);
         closePwModal();
         pendingOpenFn && pendingOpenFn();
       } else {
@@ -1113,25 +1187,11 @@
     function requirePasswordBeforeOpen(projectName, openFn){
       if(projectName.includes("TOTAL") || projectName.includes("DASHBOARD")) { openFn(); return; }
       if(projectName === "USEFUL LINKS") { openFn(); return; }
+
       const year = yearSelect.value;
-      if(UNLOCKED_BY_YEAR[year].has(projectName)) { openFn(); return; }
+      if(UNLOCKED_BY_SCOPE[CURRENT_PAGE][year].has(projectName)) { openFn(); return; }
       openPwModal(projectName, openFn);
     }
-
-    const topRow = document.getElementById("topRow");
-    const projectsContainer = document.getElementById("projects");
-    const usefulWrap = document.getElementById("usefulWrap");
-
-    // صفحات المحتوى
-    const pageNonHaramain = document.getElementById("pageNonHaramain");
-    const pageHaramain    = document.getElementById("pageHaramain");
-
-    // حاويات الحرمين (Placeholder)
-    const haramainTopRow = document.getElementById("haramainTopRow");
-    const haramainProjects = document.getElementById("haramainProjects");
-
-    // حالة الصفحة الحالية
-    let CURRENT_PAGE = "nonharamain";
 
     function makeInvisiblePlaceholder(){
       const ph = document.createElement("div");
@@ -1145,16 +1205,17 @@
       ph.className = "project center-badge";
       ph.innerHTML = `
         <div class="project-btn badge-btn">
-          <span id="badgeText" class="badge-text">
+          <span class="badge-text" style="opacity:1">
             <span class="badge-icon">✅</span>
-            <span id="badgeMsg"></span>
+            <span class="badge-msg"></span>
           </span>
         </div>
       `;
-      const badgeMsgEl = ph.querySelector("#badgeMsg");
-      const badgeTextEl = ph.querySelector("#badgeText");
+      const badgeMsgEl = ph.querySelector(".badge-msg");
+      const badgeTextEl = ph.querySelector(".badge-text");
       const animClasses = ["anim-fade","anim-slide-up","anim-zoom","anim-flip"];
       let i = 0;
+
       function showMessage(index){
         badgeTextEl.classList.remove(...animClasses);
         void badgeTextEl.offsetWidth;
@@ -1197,7 +1258,6 @@
       }
     }
 
-    /* ✅ Useful: Only Options (vertical) + selected saved */
     function renderUsefulOptions(linksContainer, optionsArr){
       linksContainer.innerHTML = "";
 
@@ -1342,21 +1402,16 @@
       usefulWrap.appendChild(usefulCard);
     }
 
-    function renderYear(year){
+    function renderNonHaramainYear(year){
       const cfg = YEARS[year];
       renderUsefulForYear(year);
 
       topRow.innerHTML = "";
       projectsContainer.innerHTML = "";
-
-      const chip = document.getElementById("linksChip");
-      chip.textContent = "Links";
+      document.getElementById("linksChip").textContent = "Links";
 
       topRow.appendChild(
-        createProjectCard(cfg.TOTAL.TITLE, {
-          isTotal:true,
-          projectLinksObj: cfg.TOTAL.LINKS
-        })
+        createProjectCard(cfg.TOTAL.TITLE, { isTotal:true, projectLinksObj: cfg.TOTAL.LINKS })
       );
 
       topRow.appendChild(
@@ -1369,10 +1424,7 @@
       );
 
       topRow.appendChild(
-        createProjectCard(cfg.DASHBOARD.TITLE, {
-          isDashboard:true,
-          projectLinksObj: cfg.DASHBOARD.LINKS
-        })
+        createProjectCard(cfg.DASHBOARD.TITLE, { isDashboard:true, projectLinksObj: cfg.DASHBOARD.LINKS })
       );
 
       const projCfg = cfg.PROJECTS || {};
@@ -1384,18 +1436,13 @@
 
       if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
         cards.push(
-          createProjectCard("SEVEN", {
-            isSeven: true,
-            sevenBranchesObj: projCfg["SEVEN"].BRANCHES
-          })
+          createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
         );
       }
 
       names.forEach(pname=>{
         cards.push(
-          createProjectCard(pname, {
-            projectLinksObj: projCfg[pname]?.LINKS || {}
-          })
+          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
         );
       });
 
@@ -1410,73 +1457,61 @@
       }
     }
 
-    // Placeholder: الحرمين
-    function renderHaramainPlaceholder(){
+    function renderHaramainYear(year){
+      const cfg = HARAMAIN_YEARS[year];
+      usefulWrap.classList.add("hidden");
+
       haramainTopRow.innerHTML = "";
       haramainProjects.innerHTML = "";
+      document.getElementById("linksChip").textContent = "Links";
 
       haramainTopRow.appendChild(
-        createProjectCard("الحرمين - إجمالي", {
-          isTotal:true,
-          projectLinksObj: {
-            "NCR": "#",
-            "INCIDENT LOG": "#",
-            "KPIs": "#",
-            "OBSERVATION": "#",
-            "ARCHIVING": "#",
-            "DAILY ATTENDANCE": "#"
-          }
-        })
+        createProjectCard(cfg.TOTAL.TITLE, { isTotal:true, projectLinksObj: cfg.TOTAL.LINKS })
       );
 
       haramainTopRow.appendChild(
         makeCenterBadge([
-          "بوابة الحرمين",
-          "سيتم إضافة العناصر لاحقاً",
-          "نفس التصميم • نفس الألوان",
-          "HARAMAIN • PORTAL"
+          "HARAMAIN SAFETY REPORTING CENTER",
+          "REAL-TIME HSE DATA",
+          "UNIFIED ACCESS FOR HARAMAIN",
+          "HARAMAIN • ONE PLACE"
         ])
       );
 
       haramainTopRow.appendChild(
-        createProjectCard("الحرمين - داشبورد", {
-          isDashboard:true,
-          projectLinksObj: {
-            "NCR": "#",
-            "INCIDENT LOG": "#",
-            "KPIs": "#",
-            "OBSERVATION": "#"
-          }
-        })
+        createProjectCard(cfg.DASHBOARD.TITLE, { isDashboard:true, projectLinksObj: cfg.DASHBOARD.LINKS })
       );
 
-      haramainProjects.appendChild(
-        createProjectCard("HARAMAIN PROJECT 1", {
-          projectLinksObj: {
-            "NCR": "#",
-            "INCIDENT LOG": "#",
-            "KPIs": "#",
-            "OBSERVATION": "#",
-            "ARCHIVING": "#",
-            "DAILY ATTENDANCE": "#"
-          }
-        })
-      );
+      const projCfg = cfg.PROJECTS || {};
+      const names = Object.keys(projCfg).sort((a,b)=>a.localeCompare(b));
+
+      const cards = [];
+      names.forEach(pname=>{
+        cards.push(
+          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
+        );
+      });
+
+      if (cards.length % 3 === 1) {
+        const last = cards.pop();
+        cards.forEach(c => haramainProjects.appendChild(c));
+        haramainProjects.appendChild(makeInvisiblePlaceholder());
+        haramainProjects.appendChild(last);
+        haramainProjects.appendChild(makeInvisiblePlaceholder());
+      } else {
+        cards.forEach(c => haramainProjects.appendChild(c));
+      }
     }
 
-    // البداية
-    renderYear("2025");
-
-    const yearToggle = document.getElementById("yearToggle");
+     const yearToggle = document.getElementById("yearToggle");
     const yearButtons = Array.from(yearToggle.querySelectorAll(".year-btn"));
 
     function setYearUI(year){
       yearButtons.forEach(b => b.classList.toggle("active", b.dataset.year === year));
       yearSelect.value = year;
-      renderYear(year);
 
-      // إذا المستخدم على صفحة الحرمين، خلّها ترندر placeholder من جديد (اختياري)
-      if (CURRENT_PAGE === "haramain") renderHaramainPlaceholder();
+      if (CURRENT_PAGE === "haramain") renderHaramainYear(year);
+      else renderNonHaramainYear(year);
 
       document.getElementById("searchInput").value = "";
     }
@@ -1485,7 +1520,6 @@
       btn.addEventListener("click", ()=> setYearUI(btn.dataset.year));
     });
 
-    // Page Toggle
     const pageToggle = document.getElementById("pageToggle");
     const pageButtons = Array.from(pageToggle.querySelectorAll(".page-btn"));
 
@@ -1494,31 +1528,21 @@
       pageButtons.forEach(b => b.classList.toggle("active", b.dataset.page === page));
 
       const isHaramain = (page === "haramain");
-
       pageNonHaramain.classList.toggle("show", !isHaramain);
       pageHaramain.classList.toggle("show", isHaramain);
 
-      // Useful Links فقط لغير الحرمين
-      usefulWrap.style.display = isHaramain ? "none" : "";
-
-      // تفريغ البحث
-      document.getElementById("searchInput").value = "";
-
-      // Render للحرمين عند فتحه
-      if (isHaramain) renderHaramainPlaceholder();
+      setYearUI(yearSelect.value || "2025");
     }
 
     pageButtons.forEach(btn=>{
       btn.addEventListener("click", ()=> setPageUI(btn.dataset.page));
     });
 
-    // بحث المشاريع حسب الصفحة الحالية
+    /* ===== Search per current page ===== */
     document.getElementById("searchInput").addEventListener("input", (e)=>{
       const q = e.target.value.trim().toLowerCase();
-
       const container = (CURRENT_PAGE === "haramain") ? haramainProjects : projectsContainer;
       const allProjectCards = Array.from(container.querySelectorAll(".project:not(.placeholder)"));
-
       allProjectCards.forEach(card=>{
         const name = card.getAttribute("data-name") || "";
         card.style.display = name.includes(q) ? "" : "none";
@@ -1532,6 +1556,8 @@
       if (e.ctrlKey && ["u","s","p"].includes(key)) { e.preventDefault(); return; }
       if (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key)) { e.preventDefault(); return; }
     });
+
+      setYearUI("2025");
   </script>
 </body>
 </html>
