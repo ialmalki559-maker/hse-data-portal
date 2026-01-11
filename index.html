@@ -482,6 +482,75 @@
       box-shadow: var(--shadow-soft);
     }
 
+    /* ===== Page Toggle (الحرمين / غير الحرمين) ===== */
+    .page-toggle{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+
+      width: 480px;
+      max-width: 52vw;
+      min-width: 360px;
+
+      background: #071F15;
+      border:1px solid #1C4A34;
+      border-radius:999px;
+      padding:6px;
+      gap:6px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), var(--shadow-soft);
+    }
+
+    .page-btn{
+      flex:1;
+      text-align:center;
+      min-width:0;
+
+      padding:9px 16px;
+      border-radius:999px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13.5px;
+      letter-spacing:1px;
+      color:#CFE7DB;
+      background: transparent;
+      transition: all .18s ease;
+      position:relative;
+      text-transform:uppercase;
+    }
+
+    .page-btn:hover{
+      color:#FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .page-btn.active{
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow:
+        0 6px 14px rgba(34,197,94,.35),
+        inset 0 0 0 1px rgba(255,255,255,.45);
+    }
+
+    .page-btn.active::after{
+      content:"SELECTED";
+      position:absolute;
+      top:-8px; right:10px;
+      font-size:8.5px;
+      font-weight:900;
+      letter-spacing:.6px;
+      color:#E9F6EF;
+      background:#0E2A1D;
+      border:1px solid #1C4A34;
+      padding:2px 5px;
+      border-radius:999px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* صفحات المحتوى */
+    .page{ display:none; }
+    .page.show{ display:block; }
+
     /* ✅ Useful Links fixed bottom-left */
     .useful-wrap{
       position: fixed;
@@ -612,7 +681,14 @@
         </div>
       </div>
 
-      <div class="toolbar-center">
+      <div class="toolbar-center" style="flex-direction:column; gap:8px;">
+        <!-- Page Toggle -->
+        <div class="page-toggle" id="pageToggle">
+          <button class="page-btn active" data-page="nonharamain" type="button">غير الحرمين</button>
+          <button class="page-btn" data-page="haramain" type="button">الحرمين</button>
+        </div>
+
+        <!-- Year Toggle -->
         <div class="year-toggle" id="yearToggle">
           <button class="year-btn active" data-year="2025" type="button">2025</button>
           <button class="year-btn" data-year="2026" type="button">2026</button>
@@ -630,10 +706,19 @@
     </div>
   </div>
 
-  <div id="topRow" class="grid top-row"></div>
-  <div id="projects" class="grid projects-grid"></div>
+  <!-- ===== NON-HARAMAIN PAGE (الكود الحالي) ===== -->
+  <section id="pageNonHaramain" class="page show">
+    <div id="topRow" class="grid top-row"></div>
+    <div id="projects" class="grid projects-grid"></div>
+    <div class="footer">Select your project, then choose the required form.</div>
+  </section>
 
-  <div class="footer">Select your project, then choose the required form.</div>
+  <!-- ===== HARAMAIN PAGE (Placeholder الآن) ===== -->
+  <section id="pageHaramain" class="page">
+    <div id="haramainTopRow" class="grid top-row"></div>
+    <div id="haramainProjects" class="grid projects-grid"></div>
+    <div class="footer">Haramain portal (content will be added later).</div>
+  </section>
 
   <div class="signature">
     Developed by <span class="sig-name">Ibrahim Almalki</span> ✦
@@ -676,26 +761,25 @@
     window.addEventListener('load', syncLogoWidth);
     window.addEventListener('resize', syncLogoWidth);
 
-
     const ORDER = ["NCR","INCIDENT LOG","KPIs","OBSERVATION","ARCHIVING","DAILY ATTENDANCE","DAILY ATTANDANCE"];
 
-  
     const YEARS = {
       "2025": {
         PASSWORDS: {
-    "CFD": "1111",
-  "KFSH": "1111",
-  "KFSC": "1111",
-  "KSU": "1111",
-  "DIRAB": "1111",
-  "JEDDAH TOWER": "1111",
-  "SANG JEDDAH": "1111",
-  "SANG QASSIM": "1111",
-  "SANG TAIF": "1111",
-  "HHR": "1111",
-  "VALINA": "1111",
-  "KAIA": "1111",
-  "SEVEN": "1111" },
+          "CFD": "1111",
+          "KFSH": "1111",
+          "KFSC": "1111",
+          "KSU": "1111",
+          "DIRAB": "1111",
+          "JEDDAH TOWER": "1111",
+          "SANG JEDDAH": "1111",
+          "SANG QASSIM": "1111",
+          "SANG TAIF": "1111",
+          "HHR": "1111",
+          "VALINA": "1111",
+          "KAIA": "1111",
+          "SEVEN": "1111"
+        },
 
         TOTAL: {
           TITLE: "TOTAL FOR ALL PROJECTS",
@@ -703,8 +787,7 @@
             "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAASGwnde4FRLET7q3w0EuwAaWacHZkvWYiGrauLn5tB-o?e=cbupb1",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDtZOrW2LlZR6AIn5FS8d1hAYZvGLzYRU1I0-NcaMnFkkI?e=bfVFLQ",
             "KPIs": "#",
-            "OBSERVATION": "#",
-           
+            "OBSERVATION": "#"
           }
         },
 
@@ -740,14 +823,12 @@
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSC?csf=1&web=1&e=lZ8YYo" } },
 
-
           "KSU":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDCXmLFbKErQpl-SgzW4AjBAUiZLnve0AlsIapSD71eO4Y?e=KYHTah",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KSU?csf=1&web=1&e=4xItSd" } },
-
 
           "DIRAB":{ LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
@@ -756,14 +837,12 @@
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Dirab%20Road?csf=1&web=1&e=oJ1vjl" } },
 
-
           "JEDDAH TOWER": { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDcI3jHQYy8Q6F5hyta0NhcAauaF8TIfiMkKHEl_t7htHk?e=gM7Lze",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Jeddah%20Tower?csf=1&web=1&e=vPp2ZE" } },
-
 
           "SANG JEDDAH":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
@@ -772,14 +851,12 @@
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal" } },
 
-
           "SANG QASSIM":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBDjzwtRUprQp5271jTTMv3AfO52njAX7lDzopFnPfh-fs?e=1j6H1D",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN" } },
-
 
           "SANG TAIF":    { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
@@ -788,14 +865,12 @@
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN" } },
 
-
           "HHR":          { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQB-Px_e-NMpRakpA7R9FUj6AQpa4xzpnFQI-oVHjORcjx0?e=hngNSy",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/HHR?csf=1&web=1&e=NA2dSp" } },
-
 
           "VALINA":       { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
@@ -804,15 +879,12 @@
           "OBSERVATION": "#",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Valina%20Airport?csf=1&web=1&e=TypNCe" } },
 
-
           "KAIA":         { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
           "INCIDENT LOG": "#",
           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAFF80z0MJOSrjU6jz4wV8WAQKqFqTywuLjmMtU8KLOcw4?e=xQDQIA",
           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KAIA?csf=1&web=1&e=RwlRik" } },
-
-
 
           "SEVEN": {
             BRANCHES: {
@@ -824,29 +896,25 @@
       },
 
       "2026": {
-        PASSWORDS: { 
-   "CFD": "1111",
-  "KFSH": "1111",
-  "KFSC": "1111",
-  "KSU": "1111",
-  "DIRAB": "1111",
-  "JEDDAH TOWER": "1111",
-  "SANG JEDDAH": "1111",
-  "SANG QASSIM": "1111",
-  "SANG TAIF": "1111",
-  "HHR": "1111",
-  "VALINA": "1111",
-  "KAIA": "1111",
-  "SEVEN": "1111" },
+        PASSWORDS: {
+          "CFD": "1111",
+          "KFSH": "1111",
+          "KFSC": "1111",
+          "KSU": "1111",
+          "DIRAB": "1111",
+          "JEDDAH TOWER": "1111",
+          "SANG JEDDAH": "1111",
+          "SANG QASSIM": "1111",
+          "SANG TAIF": "1111",
+          "HHR": "1111",
+          "VALINA": "1111",
+          "KAIA": "1111",
+          "SEVEN": "1111"
+        },
 
-        USEFUL: { 
+        USEFUL: {
           TITLE:  "USEFUL LINKS",
-
-          OPTIONS: ["HSE OBSERVATION",
-                    "HSE PROCEDURE",
-                    "HSE FORM",
-                    "HSE TRAINING"]
-   
+          OPTIONS: ["HSE OBSERVATION","HSE PROCEDURE","HSE FORM","HSE TRAINING"]
         },
 
         TOTAL: {
@@ -871,15 +939,15 @@
         },
 
         PROJECTS: {
-          "CFD": { LINKS: 
+          "CFD": { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD5HmXzW9S5RIeJghN6NRHuAR6HNAHlQogEVe4ltZoBVhQ?e=1drfPE",
            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAtG-TE_eHQR5Ujok9qCmxFAbIYD9oH0Z6svSYmwHCHiFo?e=Lphbkm",
            "KPIs": "#",
            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
-           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C", 
+           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C",
           "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAiJgMpzOIVQJkA2-HuMz5DAWpOe0zsLPpLqtWv_kSQPps?e=b0Cl0t" } },
 
-          "KFSH": { LINKS: 
+          "KFSH": { LINKS:
           {   "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCiXnzDCJUDSabO3O39xfdIAa49Huvdg7thkhzAOxKKU58?e=zjxTbX",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA0wMrk968gQblYYHdX0xfZAYJi6_Zpx0nLO2EkcTJaexA?e=5nPfHt",
             "KPIs": "#",
@@ -887,8 +955,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSH%20%26%20RC?csf=1&web=1&e=7Vh8Dt",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBu8UMVfvI_RKR6JlqbqbQTAdAzWeicjYjLcO6rmXQ0REg?e=JGSwlZ" } },
 
-
-          "KFSC": { LINKS: 
+          "KFSC": { LINKS:
           {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBduT7xD7zcRqQZmWn9ltkRAZ1g7QpbG03csUfr-0REih4?e=rGIbEk",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAuXBmugkiuSLr4RMWiQCLlAd29TPpOUbWYdkQQFDIXwbQ?e=nrpzvW",
             "KPIs": "#",
@@ -896,8 +963,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSC?csf=1&web=1&e=lZ8YYo",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAKEwXvTcITS5cLnFUyPFdvARjUW3JZdpaVzJGqaFpWbIg?e=xavpO0"} },
 
-
-          "KSU":  { LINKS: 
+          "KSU":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCjtMGXsQfTRq4xd27elkSpARLQ4m1BsGPtwW87zIQvWLs?e=UQgoRL",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDG6SIiLdyaTbyL_kXNDW11ATT1h2A0D9ha3sWMn3sbyIM?e=XEtqQP",
             "KPIs": "#",
@@ -905,8 +971,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KSU?csf=1&web=1&e=4xItSd",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBAEP-WZoLGSppWfTj5W8EAAey2BoShUAHhyWGK-1plQN4?e=X8817Z" } },
 
-
-          "DIRAB":{ LINKS: 
+          "DIRAB":{ LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC-Xg6v_YiUSahxShfw7DBmARuW_sX8HC2f_49AUPjphmk?e=hkk2dw",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCmHyzo1-yGToVjMLCfZ8xpAb2g5O82ragqn_xVWcsFIwY?e=Kg3Apo",
             "KPIs": "#",
@@ -914,8 +979,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Dirab%20Road?csf=1&web=1&e=oJ1vjl",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC65D19iJILT4smmTLPHYbMAZ8F2IpiBxski10gXb7qWfg?e=jcrdpb"} },
 
-
-          "JEDDAH TOWER": { LINKS: 
+          "JEDDAH TOWER": { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDqo4jX42XCSrUQKla6PT6xAZD6QNmRh4sMKilegl3SwlM?e=RtPUVh",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAjca2y3BirRoD3WGh87PEbAUDZPfNjRPa_QNCJdWdfu5w?e=WCYR9l",
             "KPIs": "#",
@@ -923,8 +987,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Jeddah%20Tower?csf=1&web=1&e=vPp2ZE",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBmC0prbVeOTq2Ltrl9jCjWAYKqOLHidJnfRgbJ7d9vdsA?e=5nWg2L" } },
 
-
-          "SANG JEDDAH":  { LINKS: 
+          "SANG JEDDAH":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC23BV8P1Q3R5UuOV0oF9QyAYlWXkmhC58zBzVz06m-Fro?e=KCWhVT",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBO0NbowaI1RIsPjv73SpnwAR6EltDAzjv3jC_3JqzHIvU?e=hOLgPf",
             "KPIs": "#",
@@ -932,8 +995,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAAI8qkty3rTLPeGVPc5x9IAVsy1emMUqJKookexNZlR-I?e=U6u9bN" } },
 
-
-          "SANG QASSIM":  { LINKS: 
+          "SANG QASSIM":  { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCYk4nUV2iOQbdRkUuo9p25AZfXKkrgTem7e8uNxqF_cwc?e=0i4JXA",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAqkuMGR3xuSJzfukbtn4PdAWa46nCAHlPMI4xJxsUN6vw?e=XZcDA5",
             "KPIs": "#",
@@ -941,8 +1003,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCRx-Ms3pskTL6WSg8TLfkCARRjsGMrmyxaUOhynMF7nfA?e=Zu99KB"} },
 
-
-          "SANG TAIF":    { LINKS: 
+          "SANG TAIF":    { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAruCtnEk7oTYjZwHF9HGxsAUPAEZMN05lU8Lw49PQQ7HA?e=sk9bgK",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCbQqeK0TmdT59yRAJy7yyBAQM9VAN2tEfYGf3HiD9aODE?e=mTM4Hu",
             "KPIs": "#",
@@ -950,8 +1011,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Taif)?csf=1&web=1&e=JXeKHY",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD32nfEqbpMSJhOhQss35M2AcUIwDUN72PegDqaxX72Onw?e=Pueuae"} },
 
-
-          "HHR":          { LINKS: 
+          "HHR":          { LINKS:
           {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDAlab5e3bZR58p2SwaiMvsASV7t47JCIW4AFyXGfBQqIM?e=n8ONvx",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCTiidA2O_PSYvKvNpaP82QAcnkss2f_7IHsB2GSi7G63M?e=nRdoNu",
             "KPIs": "#",
@@ -959,8 +1019,7 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/HHR?csf=1&web=1&e=NA2dSp",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA6Yr-PHy-iQL-wWHKgbKuHAf-bVkA3D2xjaFFM8YnaMx4?e=rq1dCc"} },
 
-
-          "VALINA":       { LINKS: 
+          "VALINA":       { LINKS:
           {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBvNJ29ORZQRrwOCdF9YBCXAVEDoW2ynxUnY2qjMa9dyI8?e=NgZn7K",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBUNWPnSstkTa5I1ESINZaDAZjh7tiU-b2I8UTUY2PyXnA?e=TxR0bY",
             "KPIs": "#",
@@ -968,16 +1027,14 @@
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Valina%20Airport?csf=1&web=1&e=TypNCe",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC5jpF2YlmORI1WXkd-_m3GAeGFExExUHAiAwovCAjd_xY?e=tKNmts"} },
 
-
-          "KAIA":         { LINKS: 
+          "KAIA":         { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDpTkaz1neASZ14qndj1lLrASJgBZPDQf1iSlBG5Nj6cwQ?e=cfZKj9",
             "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD4-S8QTwl1TrARq6_x2-91AbzgJtw9J2ENYXGsGN-2v8Q?e=ttDKZV",
             "KPIs": "#",
             "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
             "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KAIA?csf=1&web=1&e=RwlRik",
             "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDl7_zF0ZSQSoTQ6hfe69HSAdYVflytvnaooAHyFVKjOmg?e=8DGK0y"
-} },
-
+          } },
 
           "SEVEN": {
             BRANCHES: {
@@ -1064,6 +1121,17 @@
     const topRow = document.getElementById("topRow");
     const projectsContainer = document.getElementById("projects");
     const usefulWrap = document.getElementById("usefulWrap");
+
+    // صفحات المحتوى
+    const pageNonHaramain = document.getElementById("pageNonHaramain");
+    const pageHaramain    = document.getElementById("pageHaramain");
+
+    // حاويات الحرمين (Placeholder)
+    const haramainTopRow = document.getElementById("haramainTopRow");
+    const haramainProjects = document.getElementById("haramainProjects");
+
+    // حالة الصفحة الحالية
+    let CURRENT_PAGE = "nonharamain";
 
     function makeInvisiblePlaceholder(){
       const ph = document.createElement("div");
@@ -1342,6 +1410,61 @@
       }
     }
 
+    // Placeholder: الحرمين
+    function renderHaramainPlaceholder(){
+      haramainTopRow.innerHTML = "";
+      haramainProjects.innerHTML = "";
+
+      haramainTopRow.appendChild(
+        createProjectCard("الحرمين - إجمالي", {
+          isTotal:true,
+          projectLinksObj: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#"
+          }
+        })
+      );
+
+      haramainTopRow.appendChild(
+        makeCenterBadge([
+          "بوابة الحرمين",
+          "سيتم إضافة العناصر لاحقاً",
+          "نفس التصميم • نفس الألوان",
+          "HARAMAIN • PORTAL"
+        ])
+      );
+
+      haramainTopRow.appendChild(
+        createProjectCard("الحرمين - داشبورد", {
+          isDashboard:true,
+          projectLinksObj: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#"
+          }
+        })
+      );
+
+      haramainProjects.appendChild(
+        createProjectCard("HARAMAIN PROJECT 1", {
+          projectLinksObj: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#"
+          }
+        })
+      );
+    }
+
+    // البداية
     renderYear("2025");
 
     const yearToggle = document.getElementById("yearToggle");
@@ -1351,6 +1474,10 @@
       yearButtons.forEach(b => b.classList.toggle("active", b.dataset.year === year));
       yearSelect.value = year;
       renderYear(year);
+
+      // إذا المستخدم على صفحة الحرمين، خلّها ترندر placeholder من جديد (اختياري)
+      if (CURRENT_PAGE === "haramain") renderHaramainPlaceholder();
+
       document.getElementById("searchInput").value = "";
     }
 
@@ -1358,11 +1485,42 @@
       btn.addEventListener("click", ()=> setYearUI(btn.dataset.year));
     });
 
+    // Page Toggle
+    const pageToggle = document.getElementById("pageToggle");
+    const pageButtons = Array.from(pageToggle.querySelectorAll(".page-btn"));
+
+    function setPageUI(page){
+      CURRENT_PAGE = page;
+      pageButtons.forEach(b => b.classList.toggle("active", b.dataset.page === page));
+
+      const isHaramain = (page === "haramain");
+
+      pageNonHaramain.classList.toggle("show", !isHaramain);
+      pageHaramain.classList.toggle("show", isHaramain);
+
+      // Useful Links فقط لغير الحرمين
+      usefulWrap.style.display = isHaramain ? "none" : "";
+
+      // تفريغ البحث
+      document.getElementById("searchInput").value = "";
+
+      // Render للحرمين عند فتحه
+      if (isHaramain) renderHaramainPlaceholder();
+    }
+
+    pageButtons.forEach(btn=>{
+      btn.addEventListener("click", ()=> setPageUI(btn.dataset.page));
+    });
+
+    // بحث المشاريع حسب الصفحة الحالية
     document.getElementById("searchInput").addEventListener("input", (e)=>{
       const q = e.target.value.trim().toLowerCase();
-      const allProjectCards = Array.from(projectsContainer.querySelectorAll(".project:not(.placeholder)"));
+
+      const container = (CURRENT_PAGE === "haramain") ? haramainProjects : projectsContainer;
+      const allProjectCards = Array.from(container.querySelectorAll(".project:not(.placeholder)"));
+
       allProjectCards.forEach(card=>{
-        const name = card.getAttribute("data-name");
+        const name = card.getAttribute("data-name") || "";
         card.style.display = name.includes(q) ? "" : "none";
       });
     });
