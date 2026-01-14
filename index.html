@@ -1,22 +1,1694 @@
-function renderUsefulForYear(year){
-  usefulWrap.innerHTML = "";
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HSE Data Portal</title>
 
-  const cfg = YEARS[year];
+  <style>
+    :root{
+      --bg: #0B1E14;
+      --bg-soft:#0F2A1C;
 
-  // إذا ما فيه Useful في هذه السنة -> اخفِ القسم
-  if (!cfg?.USEFUL) {
-    usefulWrap.classList.add("hidden");
-    return;
+      --card:#0E2A1D;
+      --card-border:#1C4A34;
+
+      --text:#E9F6EF;
+      --muted:#A9C9B7;
+
+      --accent:#22C55E;
+      --accent-2:#16A34A;
+      --accent-3:#86EFAC;
+
+      --linkA:#22C55E;
+      --linkB:#059669;
+
+      --shadow: 0 10px 30px rgba(0,0,0,.30);
+      --shadow-soft: 0 6px 16px rgba(0,0,0,.20);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      min-width: 1100px;
+
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #1B5A3D 0%, transparent 60%),
+        radial-gradient(900px 650px at 110% 0%, #17704B 0%, transparent 55%),
+        radial-gradient(900px 650px at 50% 110%, #1C8A5B 0%, transparent 55%),
+        var(--bg);
+
+      color:var(--text);
+      padding:16px;
+
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .header{
+      position: sticky; top:0; z-index:10;
+      background: linear-gradient(180deg, rgba(11,30,20,.98), rgba(11,30,20,.85), transparent);
+      padding:8px 4px 14px 4px;
+      backdrop-filter: blur(6px);
+    }
+
+    .title{
+      display:flex; align-items:center; gap:12px;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      padding:8px 10px;
+      background:var(--bg-soft);
+      border:1px solid #123626;
+      border-radius:14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+ 
+    .text-logo{
+      text-align:left;
+      padding:6px 8px;
+      border-radius:8px;
+      background:#FFFFFF;
+      color:#000000;
+      border:1px solid rgba(0,0,0,.18);
+      box-shadow:0 4px 10px rgba(0,0,0,.10);
+      line-height:1.08;
+      display:inline-block;
+      width: fit-content;
+      overflow: visible;
+    }
+
+    .text-logo-ar,
+    .text-logo-en-wrap,
+    .text-logo-subrow{ width:100%; }
+
+    .text-logo-ar{
+      direction: rtl; white-space:nowrap;
+      font-weight:400; font-size:13px;
+      text-align:right; color:#000;
+    }
+
+    .text-logo-en-wrap{
+      display:inline-block; text-align:right; margin-top:2px;
+    }
+
+    .text-logo-en{
+      direction:ltr; white-space:nowrap;
+      font-weight:400; font-size:13px;
+      letter-spacing:1.0px; text-transform:uppercase;
+      color:#000; display:inline-block;
+    }
+
+    .text-logo-line{
+      height:2px; width:100%;
+      background: var(--accent);
+      margin:4px 0;
+    }
+
+    .text-logo-subrow{
+      display:flex; align-items:center; gap:8px;
+      white-space:nowrap; font-weight:400;
+      font-size:11.5px; letter-spacing:.4px;
+      color:#000; margin-top:1px;
+      justify-content: space-between; padding-inline: 2px;
+    }
+
+    .text-logo-subrow .ar{ direction: rtl; }
+    .text-logo-subrow .en{ direction: ltr; text-transform:uppercase; }
+    .text-logo-subrow .sep{
+      width:2px; height:11px; background: var(--accent);
+      flex:0 0 auto; margin-inline: 2px;
+    }
+
+    .heading{ display:flex; flex-direction:column; gap:2px; }
+
+    .dept-title{
+      font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
+      color: var(--text);
+      text-shadow: 0 2px 6px rgba(0,0,0,.35);
+      line-height:1.1; margin-bottom: 0;
+    }
+
+    h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; }
+    .subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+
+    .toolbar{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: minmax(200px, 1fr) auto minmax(140px, 1fr);
+      align-items:center;
+      gap:8px;
+    }
+    .toolbar-left{ display:flex; justify-content:flex-start; }
+    .toolbar-center{ display:flex; justify-content:center; }
+    .toolbar-right{ display:flex; justify-content:flex-end; }
+
+    .search{
+      flex:1; display:flex; align-items:center; gap:8px; background:var(--bg-soft);
+      border:1px solid #14402D; border-radius:12px; padding:8px 10px;
+    }
+    .search input{
+      width:100%; border:0; outline:none; background:transparent; color:var(--text);
+      font-size:14px; -webkit-user-select: text; user-select: text;
+    }
+
+    .chip{
+      font-size:12px; color:#DFF3E8; background:#0C2A1D; border:1px solid #1C4A34;
+      padding:6px 8px; border-radius:999px; white-space:nowrap;
+    }
+
+    .grid{ margin-top:10px; display:grid; gap:10px; }
+    .top-row{ grid-template-columns: repeat(3, 1fr); margin-bottom: 70px; }
+    .projects-grid{ grid-template-columns: repeat(3, 1fr); }
+
+    .center-badge{ visibility: visible; pointer-events: none; }
+
+    .badge-btn{
+      cursor: default !important;
+      justify-content: center; align-items: center; text-align:center;
+      min-height: 70px; padding: 14px 22px;
+      background:
+        radial-gradient(420px 220px at 50% -70%, rgba(134,239,172,.35), transparent 60%),
+        linear-gradient(180deg, rgba(16,75,48,.55), rgba(8,34,24,.95));
+      border: 1.5px solid rgba(134,239,172,.75);
+      position: relative;
+      box-shadow:
+        0 10px 22px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .badge-btn::after{
+      content:""; position:absolute; inset:6px;
+      border:1px dashed rgba(34,197,94,.7);
+      border-radius:12px; opacity:.9; pointer-events:none;
+    }
+
+    .badge-text{
+      font-family: "Montserrat","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+      font-weight: 900; font-size: 15.6px; letter-spacing: 2.1px;
+      text-transform: uppercase; color: var(--accent-3);
+      line-height: 1.2; display:flex; align-items:center; justify-content:center; gap:8px;
+      text-shadow: 0 1px 0 rgba(0,0,0,.35);
+      width:100%; white-space: nowrap; opacity: 0;
+    }
+    .badge-icon{ font-size:16px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); opacity:.95; }
+
+    .anim-fade { animation: fadeInOut 1.0s ease forwards; }
+    @keyframes fadeInOut{ 0%{opacity:0} 100%{opacity:1} }
+    .anim-slide-up { animation: slideUp 1.0s ease forwards; }
+    @keyframes slideUp{ 0%{opacity:0; transform:translateY(10px)} 100%{opacity:1; transform:translateY(0)} }
+    .anim-zoom { animation: zoomIn 1.0s ease forwards; }
+    @keyframes zoomIn{ 0%{opacity:0; transform:scale(.96)} 100%{opacity:1; transform:scale(1)} }
+    .anim-flip { transform-origin: center; animation: flipIn 1.1s ease forwards; }
+    @keyframes flipIn{ 0%{opacity:0; transform:rotateX(70deg)} 100%{opacity:1; transform:rotateX(0)} }
+
+    .placeholder{ visibility: hidden; pointer-events: none; }
+
+    .project{
+      background: linear-gradient(180deg, #0E2A1D, #0B2419);
+      border:1px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .project-btn{
+      width:100%; border:0; cursor:pointer;
+      background:
+        radial-gradient(600px 200px at 0% -50%, rgba(34,197,94,.35), transparent 60%),
+        radial-gradient(500px 250px at 100% -60%, rgba(22,163,74,.30), transparent 55%),
+        var(--card);
+      padding:14px 14px; color:var(--text);
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:15px; font-weight:900; letter-spacing:.8px;
+      transition: transform .12s ease;
+      position: relative;
+    }
+    .project-btn:hover{ transform: translateY(-1px); }
+
+    .project-left{ display:flex; align-items:center; gap:10px; }
+    .project-dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+
+    .project.total{
+      border-color: #2F7B57;
+      box-shadow: 0 12px 34px rgba(34,197,94,.12), var(--shadow);
+    }
+    .project.total .project-dot{
+      background: linear-gradient(135deg, #E8FFD9, var(--accent));
+      box-shadow: 0 0 0 5px rgba(134,239,172,.18);
+    }
+
+    .project.dashboard{
+      border-color: #2F7B57;
+      box-shadow: 0 12px 34px rgba(34,197,94,.12), var(--shadow);
+      opacity: .98;
+    }
+    .project.dashboard .project-dot{
+      background: linear-gradient(135deg, #DBFFE7, var(--accent));
+      box-shadow: 0 0 0 5px rgba(34,197,94,.14);
+    }
+
+    .chev{ font-size:20px; opacity:.9; transition: transform .15s ease; }
+    .project.open .chev{ transform: rotate(180deg); }
+
+    .links{
+      display:none; padding:12px; background: rgba(6,20,14,.9);
+      border-top:1px solid #164733;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .project.open .links{ display:flex; }
+
+    .link-btn{
+      flex:1 1 calc(20% - 8px); min-width:120px; text-decoration:none;
+      padding:11px 10px; border-radius:12px;
+      font-size:13px; font-weight:900; letter-spacing:.3px;
+      display:flex; align-items:center; justify-content:center;
+      color:#FFFFFF; background: linear-gradient(135deg, var(--linkA), var(--linkB));
+      box-shadow: 0 8px 16px rgba(0,0,0,.25);
+      transition: transform .12s ease, filter .2s ease, opacity .2s ease;
+      border:1px solid rgba(255,255,255,.25); text-align:center;
+    }
+    .link-btn:hover{ transform: translateY(-1px); filter: brightness(.96); }
+    .link-btn.disabled{
+      opacity:.45; cursor:not-allowed; filter:saturate(.4); transform:none !important;
+    }
+ 
+    .subproj-wrap{
+      width:100%;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:10px;
+    }
+    .subproj-btn{
+      flex:1 1 calc(50% - 8px);
+      min-width:160px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(12,42,29,.85);
+      color: var(--text);
+      font-weight:900;
+      letter-spacing:.6px;
+      cursor:pointer;
+      transition: transform .12s ease, filter .2s ease;
+      box-shadow: 0 8px 16px rgba(0,0,0,.18);
+      position: relative;
+    }
+    .subproj-btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .subproj-btn.active{
+      background: linear-gradient(135deg, rgba(134,239,172,.85), rgba(34,197,94,.85));
+      color:#052015;
+      border-color: rgba(255,255,255,.45);
+      box-shadow: 0 10px 18px rgba(34,197,94,.18);
+    }
+    .subproj-btn.active::after{
+      content: "SELECTED";
+      position: absolute;
+      top: -7px;
+      right: 10px;
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: .6px;
+      color: #E9F6EF;
+      background: #0E2A1D;
+      border: 1px solid #1C4A34;
+      padding: 2px 6px;
+      border-radius: 999px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.35);
+      pointer-events: none;
+    }
+
+    .subproj-title{
+      width:100%;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.8px;
+      color: var(--muted);
+      margin: 0 0 6px 2px;
+      text-transform: uppercase;
+    }
+
+    .footer{ margin:14px 4px 4px; text-align:center; font-size:12px; color:var(--muted); }
+
+    .signature{
+      position: fixed; right: 14px; bottom: 10px;
+      font-size: 10.5px; letter-spacing: .35px; color: #CFE7DB; opacity: .75;
+      display: flex; align-items: center; gap: 6px; z-index: 9999; pointer-events: none;
+      text-shadow: 0 1px 2px rgba(0,0,0,.35);
+    }
+    .sig-name{ color: var(--accent); font-weight: 900; }
+    .sig-dot{ opacity:.7; }
+
+ 
+    .pw-overlay{
+      position: fixed; inset:0; background: rgba(0,0,0,.55);
+      display:none; align-items:center; justify-content:center;
+      z-index: 9998; backdrop-filter: blur(4px);
+    }
+    .pw-overlay.show{ display:flex; }
+
+    .pw-modal{
+      width: 360px; max-width: 92vw;
+      background: linear-gradient(180deg, #0E2A1D, #0B2419);
+      border:1px solid #1C4A34;
+      border-radius:16px; box-shadow: 0 20px 50px rgba(0,0,0,.5);
+      padding:14px;
+    }
+    .pw-header{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .pw-title{
+      font-size:16px; font-weight:900; letter-spacing:.6px;
+    }
+    .pw-subtitle{
+      font-size:12px; color: var(--muted); margin-top:2px;
+    }
+    .pw-close{
+      background: transparent; border:0; color: var(--text);
+      font-size:18px; cursor:pointer; opacity:.8;
+    }
+    .pw-close:hover{ opacity:1; }
+
+    .pw-input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid #1C4A34;
+      background:#081C14;
+      color:var(--text);
+      font-size:14px;
+      outline:none;
+      -webkit-user-select:text; user-select:text;
+    }
+    .pw-input:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+    }
+
+    .pw-error{
+      margin-top:8px;
+      font-size:12px;
+      color:#FCA5A5;
+      font-weight:800;
+    }
+
+    .pw-actions{
+      margin-top:12px;
+      display:flex; gap:8px; justify-content:flex-end;
+    }
+    .pw-btn{
+      padding:8px 12px; border-radius:10px; font-weight:900; font-size:13px;
+      border:1px solid rgba(255,255,255,.18);
+      cursor:pointer;
+    }
+    .pw-cancel{
+      background:#0C2A1D; color:var(--text);
+    }
+    .pw-submit{
+      background: linear-gradient(135deg, var(--linkA), var(--linkB));
+      color:#fff;
+    }
+    .pw-btn:hover{ transform: translateY(-1px); }
+
+
+    .year-toggle{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+
+      width: 480px;
+      max-width: 52vw;
+      min-width: 360px;
+
+      background: #071F15;
+      border:1px solid #1C4A34;
+      border-radius:999px;
+      padding:6px;
+      gap:6px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), var(--shadow-soft);
+    }
+    .year-btn{
+      flex:1;
+      text-align:center;
+      min-width:0;
+
+      padding:9px 16px;
+      border-radius:999px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13.5px;
+      letter-spacing:1px;
+      color:#CFE7DB;
+      background: transparent;
+      transition: all .18s ease;
+      position:relative;
+      text-transform:uppercase;
+    }
+    .year-btn:hover{
+      color:#FFFFFF;
+      transform: translateY(-1px);
+    }
+    .year-btn.active{
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow:
+        0 6px 14px rgba(34,197,94,.35),
+        inset 0 0 0 1px rgba(255,255,255,.45);
+    }
+    .year-btn.active::after{
+      content:"SELECTED";
+      position:absolute;
+      top:-8px; right:10px;
+      font-size:8.5px;
+      font-weight:900;
+      letter-spacing:.6px;
+      color:#E9F6EF;
+      background:#0E2A1D;
+      border:1px solid #1C4A34;
+      padding:2px 5px;
+      border-radius:999px;
+      box-shadow: var(--shadow-soft);
+    }
+
+
+    .page-toggle{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+
+      width: 480px;
+      max-width: 52vw;
+      min-width: 360px;
+
+      background: #071F15;
+      border:1px solid #1C4A34;
+      border-radius:999px;
+      padding:6px;
+      gap:6px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), var(--shadow-soft);
+    }
+
+    .page-btn{
+      flex:1;
+      text-align:center;
+      min-width:0;
+
+      padding:9px 16px;
+      border-radius:999px;
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      font-size:13.5px;
+      letter-spacing:1px;
+      color:#CFE7DB;
+      background: transparent;
+      transition: all .18s ease;
+      position:relative;
+      text-transform:uppercase;
+    }
+
+    .page-btn:hover{
+      color:#FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .page-btn.active{
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      box-shadow:
+        0 6px 14px rgba(34,197,94,.35),
+        inset 0 0 0 1px rgba(255,255,255,.45);
+    }
+
+    .page-btn.active::after{
+      content:"SELECTED";
+      position:absolute;
+      top:-8px; right:10px;
+      font-size:8.5px;
+      font-weight:900;
+      letter-spacing:.6px;
+      color:#E9F6EF;
+      background:#0E2A1D;
+      border:1px solid #1C4A34;
+      padding:2px 5px;
+      border-radius:999px;
+      box-shadow: var(--shadow-soft);
+    }
+
+
+    .page{ display:none; }
+    .page.show{ display:block; }
+
+      .useful-wrap{
+      position: fixed;
+      left: 14px;
+      bottom: 12px;
+      z-index: 9990;
+      width: 320px;
+      max-width: 32vw;
+    }
+    .useful-wrap.hidden{ display:none; }
+
+    .project.useful{
+      border-color: rgba(134,239,172,.95);
+      box-shadow:
+        0 14px 40px rgba(34,197,94,.18),
+        0 0 0 1px rgba(134,239,172,.22) inset;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project.useful .project-btn{
+      padding: 12px 12px;
+      font-size: 14px;
+    }
+
+    .project.useful::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 18px;
+      pointer-events:none;
+      animation: usefulGlow 1.6s ease-in-out infinite;
+    }
+    @keyframes usefulGlow{
+      0%,100%{
+        box-shadow:
+          0 0 18px rgba(34,197,94,.18),
+          0 0 34px rgba(134,239,172,.12);
+        filter: brightness(1);
+      }
+      50%{
+        box-shadow:
+          0 0 26px rgba(34,197,94,.32),
+          0 0 52px rgba(134,239,172,.20);
+        filter: brightness(1.08);
+      }
+    }
+
+    .project.useful::after{
+      content:"";
+      position:absolute;
+      top:-60%;
+      left:-40%;
+      width: 60%;
+      height: 220%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: rotate(18deg);
+      animation: usefulShine 2.6s linear infinite;
+      pointer-events:none;
+      opacity:.6;
+    }
+    @keyframes usefulShine{
+      0%   { transform: translateX(-30%) rotate(18deg); }
+      100% { transform: translateX(180%) rotate(18deg); }
+    }
+
+    .project.useful .project-btn::after{
+      content:"USEFUL";
+      position:absolute;
+      top:10px;
+      right:12px;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      color:#052015;
+      background: linear-gradient(135deg, var(--accent-3), var(--accent));
+      padding: 3px 7px;
+      border-radius: 999px;
+      box-shadow: 0 8px 18px rgba(34,197,94,.25);
+      pointer-events:none;
+    }
+
+    .useful-vertical{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+    .useful-vertical .subproj-btn{
+      width:100%;
+      flex:0 0 auto;
+      min-width:0;
+    }
+#linksChip { display: none !important; }
+
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="title">
+      <div class="text-logo" aria-label="Saudi Binladin Group Contracting">
+        <div class="text-logo-ar">مجموعـة بن لادن السعوديـة</div>
+
+        <div class="text-logo-en-wrap">
+          <div class="text-logo-en">SAUDI BINLADIN GROUP</div>
+                  </div>
+
+        <div class="text-logo-subrow">
+         
+                            </div>
+      </div>
+
+      <div class="heading">
+        <div class="dept-title">HSE DEPARTMENT</div>
+        <h1>HSE Data Portal</h1>
+        <div class="subtitle">Select your project → choose the required form</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search">
+          <span style="opacity:.7">🔎</span>
+          <input id="searchInput" type="text" placeholder="Search project name "/>
+        </div>
+      </div>
+
+      <div class="toolbar-center" style="flex-direction:column; gap:8px;">
+        <!-- Page Toggle -->
+        <div class="page-toggle" id="pageToggle">
+          <button class="page-btn active" data-page="nonharamain" type="button">Non Haramain</button>
+          <button class="page-btn" data-page="haramain" type="button">Haramain</button>
+        </div>
+
+        <!-- Year Toggle -->
+        <div class="year-toggle" id="yearToggle">
+          <button class="year-btn active" data-year="2025" type="button">2025</button>
+          <button class="year-btn" data-year="2026" type="button">2026</button>
+        </div>
+
+        <select id="yearSelect" style="display:none">
+          <option value="2025" selected>2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+<div class="toolbar-right">
+  <button class="chip" id="contactBtn" type="button">CONTACT SUPPORT</button>
+</div>
+
+      <div class="toolbar-right">
+        <div class="chip" id="linksChip">Links</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NON HARAMAIN ===== -->
+  <section id="pageNonHaramain" class="page show">
+    <div id="topRow" class="grid top-row"></div>
+    <div id="projects" class="grid projects-grid"></div>
+    <div class="footer">Select your project, then choose the required form.</div>
+  </section>
+
+  <!-- ===== HARAMAIN ===== -->
+  <section id="pageHaramain" class="page">
+    <div id="haramainTopRow" class="grid top-row"></div>
+    <div id="haramainProjects" class="grid projects-grid"></div>
+    <div class="footer">Select your project, then choose the required form.</div>
+  </section>
+
+  <div class="signature">
+    Developed by <span class="sig-name">Ibrahim Almalki</span> ✦
+    <span class="sig-dot">•</span> Version 2.3
+  </div>
+
+  <!-- Useful Links (Non Haramain 2026 only) -->
+  <div id="usefulWrap" class="useful-wrap hidden"></div>
+
+  <!-- Password Modal -->
+  <div id="pwOverlay" class="pw-overlay" aria-hidden="true">
+    <div class="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+      <div class="pw-header">
+        <div>
+          <div id="pwTitle" class="pw-title">Project Access</div>
+          <div id="pwSubtitle" class="pw-subtitle">Enter password to open project</div>
+        </div>
+        <button id="pwClose" class="pw-close" title="Close">✕</button>
+      </div>
+
+      <input id="pwInput" class="pw-input" type="password" placeholder="Password" autocomplete="off"/>
+      <div id="pwError" class="pw-error" style="display:none;">Wrong password. Please try again.</div>
+
+      <div class="pw-actions">
+        <button id="pwCancel" class="pw-btn pw-cancel">Cancel</button>
+        <button id="pwSubmit" class="pw-btn pw-submit">Open</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+   
+    function syncLogoWidth(){
+      const logo = document.querySelector('.text-logo');
+      const enWrap = document.querySelector('.text-logo-en-wrap');
+      if(!logo || !enWrap) return;
+      const w = enWrap.getBoundingClientRect().width;
+      logo.style.width = Math.ceil(w + 8) + 'px';
+    }
+    window.addEventListener('load', syncLogoWidth);
+    window.addEventListener('resize', syncLogoWidth);
+
+    const ORDER = ["NCR","INCIDENT LOG","KPIs","OBSERVATION","ARCHIVING","DAILY ATTENDANCE","DAILY ATTANDANCE"];
+
+
+    const YEARS = {
+      "2025": {
+        PASSWORDS: {
+          "CFD": "1111",
+          "KFSH": "1111",
+          "KFSC": "1111",
+          "KSU": "1111",
+          "DIRAB": "1111",
+          "JEDDAH TOWER": "1111",
+          "SANG JEDDAH": "1111",
+          "SANG QASSIM": "1111",
+          "SANG TAIF": "1111",
+          "HHR": "1111",
+          "VALINA": "1111",
+          "KAIA": "1111",
+          "SEVEN": "1111"
+        },
+
+        TOTAL: {
+          TITLE: "TOTAL FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAASGwnde4FRLET7q3w0EuwAaWacHZkvWYiGrauLn5tB-o?e=cbupb1",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDtZOrW2LlZR6AIn5FS8d1hAYZvGLzYRU1I0-NcaMnFkkI?e=bfVFLQ",
+            "KPIs": "#",
+            "OBSERVATION": "#"
+          }
+        },
+
+        DASHBOARD: {
+          TITLE: "DASHBOARD FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi"
+          }
+        },
+
+        PROJECTS: {
+          "CFD": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD_PABCjsABQ7zEYBQHA3_JAfcCP3AF-1ijbpsJGwwPr5g?e=caOVb9",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDVkMrzEDJcQqhdDEUD09RhAUWlQNcWWTR-mZqEJNc9Cd0?e=LBTvue" } },
+
+          "KFSH": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD-kkIxsThVRJZqwchK8WJ9AV_GyxGM2bd8NBEItfBHEZA?e=r6EUbD",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSH%20%26%20RC?csf=1&web=1&e=7Vh8Dt" } },
+
+          "KFSC": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCwyiAExBz9QZvFXUapu9k6AT82ofpGEW48OsPW-wK7hcY?e=14oPY3",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSC?csf=1&web=1&e=lZ8YYo" } },
+
+          "KSU":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDCXmLFbKErQpl-SgzW4AjBAUiZLnve0AlsIapSD71eO4Y?e=KYHTah",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KSU?csf=1&web=1&e=4xItSd" } },
+
+          "DIRAB":{ LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAuSC7V00C5SoDJwELtrfZLAVPmpxZINwXwpufCnutoMgY?e=JYrsfX",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Dirab%20Road?csf=1&web=1&e=oJ1vjl" } },
+
+          "JEDDAH TOWER": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDcI3jHQYy8Q6F5hyta0NhcAauaF8TIfiMkKHEl_t7htHk?e=gM7Lze",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Jeddah%20Tower?csf=1&web=1&e=vPp2ZE" } },
+
+          "SANG JEDDAH":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQClQMzgFGPlRZ_CzQxOyicqAfl549j0DtXooRv11nHNwps?e=Jb3Q7i",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal" } },
+
+          "SANG QASSIM":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalkي_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBDjzwtRUprQp5271jTTMv3AfO52njAX7lDzopFnPfh-fs?e=1j6H1D",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN" } },
+
+          "SANG TAIF":    { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDWHr5_hNl-R7Lx6rthzlp2ARRBbLIrZdClM8nDp3suzsY?e=GYZtkd",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN" } },
+
+          "HHR":          { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQB-Px_e-NMpRakpA7R9FUj6AQpa4xzpnFQI-oVHjORcjx0?e=hngNSy",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/HHR?csf=1&web=1&e=NA2dSp" } },
+
+          "VALINA":       { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCjdGMbHQ-TRoDZv-ksuGfVAUislUkJuNyy15jkXhx_7tI?e=ITqWGt",
+          "OBSERVATION": "#",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Valina%20Airport?csf=1&web=1&e=TypNCe" } },
+
+          "KAIA":         { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAFF80z0MJOSrjU6jz4wV8WAQKqFqTywuLjmMtU8KLOcw4?e=xQDQIA",
+          "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
+          "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KAIA?csf=1&web=1&e=RwlRik" } },
+           
+            "TAIBA":         { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=WEqyvb",
+          "INCIDENT LOG": "#",
+          "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAsRtsujI9RTq7mH_cxUMCEAemWEOeGWTcbzRSvWmm3cOU?e=r8WIaT",
+         "OBSERVATION": "https://docs.google.com/spreadsheets/d/1X9ouVBUWlNPCUGilzCtgDOE7gJzAR9WgCqVwRSKT7qQ/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDPZc-EYHaIRba_CF34K3QyAWtK2yB1A8GjNjrQj8RRmNw?email=mansor.alsharif%40sbg.com.sa&e=roObTr" } },
+
+
+          "SEVEN": {
+            BRANCHES: {
+              "DAMMAM": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU","INCIDENT LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBzZJ1G3n-rRY1-KqL2jIpFAUP_vyK4x9c1BDFwhTDHX8Q?e=qUZrot","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx" } },
+              "KHOBAR": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCfUpwSGj2pSrYeOxByXhIzAfIxe1JjVmx11pbU-qcJ8Ms?e=78KbWU","INCIDENT LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCp2N5HcX7iTo2R9BakAYRJAR96AM9Uhsz3JmsCmcF5yvo?e=Cg4eUZ","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx" } }
+            }
+          }
+        }
+      },
+
+      "2026": {
+        PASSWORDS: {
+          "CFD": "1111",
+          "KFSH": "1111",
+          "KFSC": "1111",
+          "KSU": "1111",
+          "DIRAB": "1111",
+          "JEDDAH TOWER": "1111",
+          "SANG JEDDAH": "1111",
+          "SANG QASSIM": "1111",
+          "SANG TAIF": "1111",
+          "SANG HAIL": "1111",
+          "HHR": "1111",
+          "VALINA": "1111",
+          "KAIA": "1111",
+          "TAIBA": "1111",
+          "SEVEN": "1111"
+        },
+
+USEFUL: {
+  TITLE: "USEFUL LINKS",
+
+  OPTIONS: [
+    "HSE OBSERVATION",
+    "HSE PROCEDURE",
+    "HSE FORM",
+    "HSE TRAINING"
+  ],
+
+  LINKS: {
+    "HSE OBSERVATION": "https://forms.gle/pECDRjkyosaKc8nA7",
+    "HSE PROCEDURE": "#",
+    "HSE FORM": "https://sbgo365-my.sharepoint.com/:f:/g/personal/ibrahim_almalki_sbg_com_sa/IgAgKtQjyZS5Q5NjM2QdpZf5AdNP3J02jz0Uch7_lZohiqY?e=qIkgYR",
+    "HSE TRAINING": "#"
   }
+},
 
-  // إذا موجود -> أظهره
-  usefulWrap.classList.remove("hidden");
 
-  const usefulCard = createProjectCard(cfg.USEFUL.TITLE, {
-    isUseful: true,
-    usefulOptions: cfg.USEFUL.OPTIONS || [],
-    usefulLinksMap: cfg.USEFUL.LINKS || {}
+        TOTAL: {
+          TITLE: "TOTAL FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDybdklaZoXSY-uhlvqnumBAVftUsHQkanNgmkizwsgQQk?e=yRchG9",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCcwEuSkcDJTJfvMIplrb43ASiyor6rTT9ReVFW2fO-a0o?e=6Wa7Xn",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "DAILY ATTANDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBVvFHO8N4GRbw-RrYGVymiAex29zoNHR6A0rUEshhjUXI?e=3weh58",
+            "Governmental Violations": "#"
+
+          }
+        },
+
+        DASHBOARD: {
+          TITLE: "DASHBOARD FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi",
+              "Governmental Violations": "#"
+          }
+        },
+
+        PROJECTS: {
+          "CFD": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD5HmXzW9S5RIeJghN6NRHuAR6HNAHlQogEVe4ltZoBVhQ?e=1drfPE",
+           "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAtG-TE_eHQR5Ujok9qCmxFAbIYD9oH0Z6svSYmwHCHiFo?e=Lphbkm",
+           "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD_PABCjsABQ7zEYBQHA3_JAfcCP3AF-1ijbpsJGwwPr5g?e=caOVb9",
+           "OBSERVATION": "https://docs.google.com/spreadsheets/d/1qsZOT-0-Ne846kSS0Mga4EZ1mtsPE6803Sd5J82cMTk/edit?usp=sharing",
+           "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/CFP?csf=1&web=1&e=8eid1C",
+          "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAiJgMpzOIVQJkA2-HuMz5DAWpOe0zsLPpLqtWv_kSQPps?e=b0Cl0t",
+ "Governmental Violations": "#"
+ } },
+
+          "KFSH": { LINKS:
+          {   "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCiXnzDCJUDSabO3O39xfdIAa49Huvdg7thkhzAOxKKU58?e=zjxTbX",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA0wMrk968gQblYYHdX0xfZAYJi6_Zpx0nLO2EkcTJaexA?e=5nPfHt",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD-kkIxsThVRJZqwchK8WJ9AV_GyxGM2bd8NBEItfBHEZA?e=r6EUbD",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1GjEOVD09Lk7ZsEj8JJStLItQ3FkIN5pN_8Ql18LJxWg/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSH%20%26%20RC?csf=1&web=1&e=7Vh8Dt",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBu8UMVfvI_RKR6JlqbqbQTAdAzWeicjYjLcO6rmXQ0REg?e=JGSwlZ",
+ "Governmental Violations": "#"
+ } },
+
+          "KFSC": { LINKS:
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBduT7xD7zcRqQZmWn9ltkRAZ1g7QpbG03csUfr-0REih4?e=rGIbEk",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAuXBmugkiuSLr4RMWiQCLlAd29TPpOUbWYdkQQFDIXwbQ?e=nrpzvW",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCwyiAExBz9QZvFXUapu9k6AT82ofpGEW48OsPW-wK7hcY?e=14oPY3",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/19q6MC6QhDnmxarBzY4HhMxo0KQGkT4FJk-H1S3IYu6g/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KFSC?csf=1&web=1&e=lZ8YYo",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAKEwXvTcITS5cLnFUyPFdvARjUW3JZdpaVzJGqaFpWbIg?e=xavpO0",
+ "Governmental Violations": "#"
+} },
+
+          "KSU":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCjtMGXsQfTRq4xd27elkSpARLQ4m1BsGPtwW87zIQvWLs?e=UQgoRL",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDG6SIiLdyaTbyL_kXNDW11ATT1h2A0D9ha3sWMn3sbyIM?e=XEtqQP",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDCXmLFbKErQpl-SgzW4AjBAUiZLnve0AlsIapSD71eO4Y?e=KYHTah",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1cEa3vIRI46ZkmSGzzDpOq0L-zFxaYqXZLhhUCfaSYiQ/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KSU?csf=1&web=1&e=4xItSd",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBAEP-WZoLGSppWfTj5W8EAAey2BoShUAHhyWGK-1plQN4?e=X8817Z",
+ "Governmental Violations": "#"
+ } },
+
+          "DIRAB":{ LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC-Xg6v_YiUSahxShfw7DBmARuW_sX8HC2f_49AUPjphmk?e=hkk2dw",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCmHyzo1-yGToVjMLCfZ8xpAb2g5O82ragqn_xVWcsFIwY?e=Kg3Apo",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAuSC7V00C5SoDJwELtrfZLAVPmpxZINwXwpufCnutoMgY?e=JYrsfX",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xuguTmJ3uSmMvu_7F9QmK5DZQv1kPZ7c2umN5GZ1N6M/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Dirab%20Road?csf=1&web=1&e=oJ1vjl",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC65D19iJILT4smmTLPHYbMAZ8F2IpiBxski10gXb7qWfg?e=jcrdpb",
+ "Governmental Violations": "#"
+} },
+
+          "JEDDAH TOWER": { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDqo4jX42XCSrUQKla6PT6xAZD6QNmRh4sMKilegl3SwlM?e=RtPUVh",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAjca2y3BirRoD3WGh87PEbAUDZPfNjRPa_QNCJdWdfu5w?e=WCYR9l",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDcI3jHQYy8Q6F5hyta0NhcAauaF8TIfiMkKHEl_t7htHk?e=gM7Lze",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1E95vusRgmi5lzeF7e4zt-nmAtxfHI1ewPPljXyTtoGo/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Jeddah%20Tower?csf=1&web=1&e=vPp2ZE",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBmC0prbVeOTq2Ltrl9jCjWAYKqOLHidJnfRgbJ7d9vdsA?e=5nWg2L",
+ "Governmental Violations": "#"
+ } },
+
+          "SANG JEDDAH":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC23BV8P1Q3R5UuOV0oF9QyAYlWXkmhC58zBzVz06m-Fro?e=KCWhVT",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBO0NbowaI1RIsPjv73SpnwAR6EltDAzjv3jC_3JqzHIvU?e=hOLgPf",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQClQMzgFGPlRZ_CzQxOyicqAfl549j0DtXooRv11nHNwps?e=Jb3Q7i",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1_78SFh1mMeozbL-PQo6jKp7RS5xLfvShW17bDMVLpiM/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Jeddah)?csf=1&web=1&e=qMPCal",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAAI8qkty3rTLPeGVPc5x9IAVsy1emMUqJKookexNZlR-I?e=U6u9bN",
+ "Governmental Violations": "#"
+ } },
+
+          "SANG QASSIM":  { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCYk4nUV2iOQbdRkUuo9p25AZfXKkrgTem7e8uNxqF_cwc?e=0i4JXA",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAqkuMGR3xuSJzfukbtn4PdAWa46nCAHlPMI4xJxsUN6vw?e=XZcDA5",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBDjzwtRUprQp5271jTTMv3AfO52njAX7lDzopFnPfh-fs?e=1j6H1D",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1zAY4i9X1-sg5Jll3MGIUD08V75ONc0cY-K57xvISxIs/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Qassim)?csf=1&web=1&e=uf8NcN",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCRx-Ms3pskTL6WSg8TLfkCARRjsGMrmyxaUOhynMF7nfA?e=Zu99KB",
+ "Governmental Violations": "#"
+} },
+
+          "SANG TAIF":    { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAruCtnEk7oTYjZwHF9HGxsAUPAEZMN05lU8Lw49PQQ7HA?e=sk9bgK",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCbQqeK0TmdT59yRAJy7yyBAQM9VAN2tEfYGf3HiD9aODE?e=mTM4Hu",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDWHr5_hNl-R7Lx6rthzlp2ARRBbLIrZdClM8nDp3suzsY?e=GYZtkd",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1Z40qHQgR0aGhvr2DRdCUJZfQZJdwXZKzQUiaEhIm8ME/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/National%20Guard%20Housing%20(Taif)?csf=1&web=1&e=JXeKHY",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD32nfEqbpMSJhOhQss35M2AcUIwDUN72PegDqaxX72Onw?e=Pueuae",
+ "Governmental Violations": "#"
+} },
+
+           "SANG HAIL":    { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBPrWYNYtveS6uoGqhjbTmAAS4lpKbiyjxldAEL6n5Qldw?e=SFmNSg",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBJmwbysscOQ6H1iTzrCmCgAUI4wI0dOyt7mOMRYWibnU0?e=Ta574i",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#",
+ "Governmental Violations": "#"
+} },
+
+          "HHR":          { LINKS:
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDAlab5e3bZR58p2SwaiMvsASV7t47JCIW4AFyXGfBQqIM?e=n8ONvx",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCTiidA2O_PSYvKvNpaP82QAcnkss2f_7IHsB2GSi7G63M?e=nRdoNu",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQB-Px_e-NMpRakpA7R9FUj6AQpa4xzpnFQI-oVHjORcjx0?e=hngNSy",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1z_TrMtc-3aVt936mZcI430JxgBG-ssEi2u8GgbLqteU/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/HHR?csf=1&web=1&e=NA2dSp",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA6Yr-PHy-iQL-wWHKgbKuHAf-bVkA3D2xjaFFM8YnaMx4?e=rq1dCc",
+ "Governmental Violations": "#"
+} },
+
+          "VALINA":       { LINKS:
+          {  "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBvNJ29ORZQRrwOCdF9YBCXAVEDoW2ynxUnY2qjMa9dyI8?e=NgZn7K",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBUNWPnSstkTa5I1ESINZaDAZjh7tiU-b2I8UTUY2PyXnA?e=TxR0bY",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCjdGMbHQ-TRoDZv-ksuGfVAUislUkJuNyy15jkXhx_7tI?e=ITqWGt",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1xg5ax1GXPQOfreY5F9IE1p1gAJkucBK9fxu_NsirTqY/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/Valina%20Airport?csf=1&web=1&e=TypNCe",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC5jpF2YlmORI1WXkd-_m3GAeGFExExUHAiAwovCAjd_xY?e=tKNmts",
+ "Governmental Violations": "#"
+} },
+
+          "KAIA":         { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDpTkaz1neASZ14qndj1lLrASJgBZPDQf1iSlBG5Nj6cwQ?e=cfZKj9",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD4-S8QTwl1TrARq6_x2-91AbzgJtw9J2ENYXGsGN-2v8Q?e=ttDKZV",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAFF80z0MJOSrjU6jz4wV8WAQKqFqTywuLjmMtU8KLOcw4?e=xQDQIA",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1iMhj6JFTD6QAA4K9zzM5v3P1IKN6cqMlM6T7YYu-CuE/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/KAIA?csf=1&web=1&e=RwlRik",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDl7_zF0ZSQSoTQ6hfe69HSAdYVflytvnaooAHyFVKjOmg?e=8DGK0y",
+ "Governmental Violations": "#"
+          } },
+           
+            "TAIBA":         { LINKS:
+          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDgCF9DW14QSa7l9N0gfxELAbqc0JnQ_ez8tU_pbWPupZM?e=M3eD5o",
+            "INCIDENT LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDnpT7w2s5BSKwrg5qppnqsATbjiioff7aWV_YuwUiIz_I?e=FyiTlx",
+            "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAsRtsujI9RTq7mH_cxUMCEAemWEOeGWTcbzRSvWmm3cOU?e=r8WIaT",
+            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1X9ouVBUWlNPCUGilzCtgDOE7gJzAR9WgCqVwRSKT7qQ/edit?usp=sharing",
+            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDPZc-EYHaIRba_CF34K3QyAWtK2yB1A8GjNjrQj8RRmNw?email=mansor.alsharif%40sbg.com.sa&e=roObTr",
+            "DAILY ATTENDANCE": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQB7jwHIELwKSp-xL9Bky_WPAcTwyNKyOIxMaL0JQeP7aYk?e=B8O6yo",
+ "Governmental Violations": "#"
+          } },
+
+
+          "SEVEN": {
+            BRANCHES: {
+              "DAMMAM": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBgRd6X-NmWSYdR6jWeQMyNAeTAPDLHr8gSnf75GSGkhQY?e=Keyuou","INCIDENT LOG":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC23-3wKO8aRKMDg18f1jtGAY3waaStr_qDf48NK_51J9g?e=Ol3haw","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBzZJ1G3n-rRY1-KqL2jIpFAUP_vyK4x9c1BDFwhTDHX8Q?e=qUZrot","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx","DAILY ATTENDANCE":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDjT9GQOsbuS7akyKUQpQT_AQetCwJ23htQ2O5mELzzfso?e=hNLvbG",
+ "Governmental Violations": "#"
+ } },
+              "KHOBAR": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAt7qeDGFamRLLlldoGFQf8AZUU4A_JStRg-tKs-b-bIaU?e=4E3PfJ","INCIDENT LOG":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQA48MgDeXd7So-xkPCJz48hAXTkitjzAlHme99k23zNpyk?e=NC4Aux","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCp2N5HcX7iTo2R9BakAYRJAR96AM9Uhsz3JmsCmcF5yvo?e=Cg4eUZ","OBSERVATION":"#","ARCHIVING":"https://sbgo365-my.sharepoint.com/:f:/r/personal/hse_director_office_sbg_com_sa/Documents/Archive/Non_Haram%20Projects/SEVEN?csf=1&web=1&e=NICLJx","DAILY ATTENDANCE":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCyMLhxEahlS7YPOvairHsvAU5XHF0OQvrH-6UkGQ9tJI8?e=WupuMi",
+ "Governmental Violations": "#"
+ } }
+            }
+          }
+        }
+      }
+    };
+
+   
+    function haramainProjectLinksPlaceholder(){
+      return { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#","DAILY ATTENDANCE":"#" };
+    }
+
+    const HARAMAIN_YEARS = {
+       "2025": {
+        PASSWORDS: {
+          "HARAM BUILDING (HB)": "1111",
+          "PIAZZA": "1111",
+          "SERVICE BUILDING (SVB)": "1111",
+          "PEDESTRAIN TUNNELS": "1111",
+          "CUC": "1111",
+          "MARWA BRIDGE": "1111",
+         
+        },
+
+        TOTAL: {
+          TITLE: "TOTAL FOR HARAMAIN PROJECTS",
+          LINKS: haramainProjectLinksPlaceholder()
+        },
+        DASHBOARD: {
+          TITLE: "HARAMAIN DASHBOARD",
+          LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", }
+        },
+        PROJECTS: {
+          "HARAM BUILDING (HB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "PIAZZA": { LINKS: haramainProjectLinksPlaceholder() },
+          "SERVICE BUILDING (SVB)": { LINKS: haramainProjectLinksPlaceholder() },
+          "PEDESTRAIN TUNNELS": { LINKS: haramainProjectLinksPlaceholder() },
+          "CUC": { LINKS: haramainProjectLinksPlaceholder() },
+          "MARWA BRIDGE": { LINKS: haramainProjectLinksPlaceholder() },
+          "MATAF": { LINKS: haramainProjectLinksPlaceholder() }
+        }
+      },
+
+      "2026": {
+        PASSWORDS: {
+          "HARAM BUILDING (HB)": "1111",
+          "PIAZZA": "1111",
+          "SERVICE BUILDING (SVB)": "1111",
+          "PEDESTRAIN TUNNELS": "1111",
+          "CUC": "1111",
+          "MARWA BRIDGE": "1111",
+          "MATAF": "1111" 
+       },
+
+        TOTAL: {
+          TITLE: "TOTAL FOR HARAMAIN PROJECTS",
+          LINKS:{ "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+        DASHBOARD: {
+          TITLE: "HARAMAIN DASHBOARD",
+          LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+        PROJECTS: {
+          "HARAM BUILDING (HB)": { LINKS:{ "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "PIAZZA": { LINKS:{ "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "SERVICE BUILDING (SVB)": { LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "PEDESTRAIN TUNNELS": { LINKS:{ "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "CUC": { LINKS:{ "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "MARWA BRIDGE": { LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+          "MATAF": { LINKS: { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
+
+        }
+      }
+    };
+
+  
+    const UNLOCKED_BY_SCOPE = {
+      nonharamain: { "2025": new Set(), "2026": new Set() },
+      haramain:    { "2025": new Set(), "2026": new Set() }
+    };
+
+    const pwOverlay  = document.getElementById("pwOverlay");
+    const pwInput    = document.getElementById("pwInput");
+    const pwError    = document.getElementById("pwError");
+    const pwSubtitle = document.getElementById("pwSubtitle");
+    const pwClose    = document.getElementById("pwClose");
+    const pwCancel   = document.getElementById("pwCancel");
+    const pwSubmit   = document.getElementById("pwSubmit");
+    const yearSelect = document.getElementById("yearSelect");
+
+
+    const pageNonHaramain = document.getElementById("pageNonHaramain");
+    const pageHaramain    = document.getElementById("pageHaramain");
+
+    const topRow = document.getElementById("topRow");
+    const projectsContainer = document.getElementById("projects");
+    const usefulWrap = document.getElementById("usefulWrap");
+
+    const haramainTopRow = document.getElementById("haramainTopRow");
+    const haramainProjects = document.getElementById("haramainProjects");
+
+    let CURRENT_PAGE = "nonharamain"; // "nonharamain" | "haramain"
+    let pendingProjectName = null;
+    let pendingOpenFn = null;
+
+    function openPwModal(projectName, onSuccessOpen){
+      pendingProjectName = projectName;
+      pendingOpenFn = onSuccessOpen;
+      pwSubtitle.textContent = `Enter password to open ${projectName}`;
+      pwInput.value = "";
+      pwError.style.display = "none";
+      pwOverlay.classList.add("show");
+      pwOverlay.setAttribute("aria-hidden","false");
+      setTimeout(()=>pwInput.focus(), 50);
+    }
+    function closePwModal(){
+      pwOverlay.classList.remove("show");
+      pwOverlay.setAttribute("aria-hidden","true");
+      pendingProjectName = null;
+      pendingOpenFn = null;
+    }
+
+    function verifyPassword(){
+      const year = yearSelect.value;
+      const name = pendingProjectName;
+      const scope = CURRENT_PAGE;
+
+      let passMap = {};
+      if (scope === "nonharamain"){
+        passMap = (YEARS[year] || {}).PASSWORDS || {};
+      } else {
+        passMap = (HARAMAIN_YEARS[year] || {}).PASSWORDS || {};
+      }
+
+      const pass = passMap[name] || passMap["__ALL__"];
+
+      if(!pass){
+        UNLOCKED_BY_SCOPE[scope][year].add(name);
+        closePwModal();
+        pendingOpenFn && pendingOpenFn();
+        return;
+      }
+
+      if(pwInput.value === pass){
+        UNLOCKED_BY_SCOPE[scope][year].add(name);
+        closePwModal();
+        pendingOpenFn && pendingOpenFn();
+      } else {
+        pwError.style.display = "block";
+        pwInput.select();
+      }
+    }
+
+    pwClose.addEventListener("click", closePwModal);
+    pwCancel.addEventListener("click", closePwModal);
+    pwOverlay.addEventListener("click", (e)=>{ if(e.target === pwOverlay) closePwModal(); });
+    pwSubmit.addEventListener("click", verifyPassword);
+    pwInput.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") verifyPassword();
+      if(e.key === "Escape") closePwModal();
+    });
+
+    function requirePasswordBeforeOpen(projectName, openFn){
+      if(projectName.includes("TOTAL") || projectName.includes("DASHBOARD")) { openFn(); return; }
+      if(projectName === "USEFUL LINKS") { openFn(); return; }
+
+      const year = yearSelect.value;
+      if(UNLOCKED_BY_SCOPE[CURRENT_PAGE][year].has(projectName)) { openFn(); return; }
+      openPwModal(projectName, openFn);
+    }
+
+    function makeInvisiblePlaceholder(){
+      const ph = document.createElement("div");
+      ph.className = "project placeholder";
+      ph.innerHTML = `<div class="project-btn" style="cursor:default;height:100%"></div>`;
+      return ph;
+    }
+
+    function makeCenterBadge(messages){
+      const ph = document.createElement("div");
+      ph.className = "project center-badge";
+      ph.innerHTML = `
+        <div class="project-btn badge-btn">
+          <span class="badge-text" style="opacity:1">
+            <span class="badge-icon">✅</span>
+            <span class="badge-msg"></span>
+          </span>
+        </div>
+      `;
+      const badgeMsgEl = ph.querySelector(".badge-msg");
+      const badgeTextEl = ph.querySelector(".badge-text");
+      const animClasses = ["anim-fade","anim-slide-up","anim-zoom","anim-flip"];
+      let i = 0;
+
+      function showMessage(index){
+        badgeTextEl.classList.remove(...animClasses);
+        void badgeTextEl.offsetWidth;
+        badgeMsgEl.textContent = messages[index];
+        const cls = animClasses[Math.floor(Math.random() * animClasses.length)];
+        badgeTextEl.classList.add(cls);
+      }
+      showMessage(i);
+      setInterval(() => { i = (i + 1) % messages.length; showMessage(i); }, 5000);
+      return ph;
+    }
+
+    function createLinkButton(label, url){
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.className = "link-btn";
+      a.textContent = label;
+
+      if (!url || url === "#") {
+        a.classList.add("disabled");
+        a.addEventListener("click", ev => ev.preventDefault());
+      }
+      return a;
+    }
+
+    function renderLinksFromObject(container, linksObj){
+      const used = new Set();
+      ORDER.forEach(label=>{
+        if (linksObj && linksObj[label] !== undefined) {
+          container.appendChild(createLinkButton(label, linksObj[label]));
+          used.add(label);
+        }
+      });
+      if (linksObj){
+        Object.keys(linksObj).forEach(label=>{
+          if (!used.has(label)) container.appendChild(createLinkButton(label, linksObj[label]));
+        });
+      }
+    }
+
+    function renderUsefulOptions(linksContainer, optionsArr){
+      linksContainer.innerHTML = "";
+
+      const title = document.createElement("div");
+      title.className = "subproj-title";
+      title.textContent = "SELECT OPTION";
+      linksContainer.appendChild(title);
+
+      const wrap = document.createElement("div");
+      wrap.className = "useful-vertical";
+
+      function setActive(btn){
+        Array.from(wrap.querySelectorAll(".subproj-btn")).forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        localStorage.setItem("useful_selected_option", btn.textContent);
+      }
+
+      optionsArr.forEach(name=>{
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "subproj-btn";
+        b.textContent = name;
+        b.addEventListener("click", ()=> setActive(b));
+        wrap.appendChild(b);
+      });
+
+      linksContainer.appendChild(wrap);
+
+      const saved = localStorage.getItem("useful_selected_option");
+      const btns = wrap.querySelectorAll(".subproj-btn");
+      const found = Array.from(btns).find(b => b.textContent === saved);
+      (found || btns[0])?.click();
+    }
+
+    function createProjectCard(name, options = {}){
+      const card = document.createElement("div");
+      card.className = "project"
+        + (options.isTotal ? " total" : "")
+        + (options.isDashboard ? " dashboard" : "")
+        + (options.isUseful ? " useful" : "");
+
+      card.setAttribute("data-name", name.toLowerCase());
+
+      const btn = document.createElement("button");
+      btn.className = "project-btn";
+
+      const displayName =
+        options.isTotal ? `⭐ ${name}` :
+        options.isDashboard ? `📊 ${name}` :
+        options.isUseful ? `✨ ${name}` :
+        name;
+
+      btn.innerHTML = `
+        <div class="project-left">
+          <span class="project-dot"></span>
+          <span>${displayName}</span>
+        </div>
+        <span class="chev">▾</span>
+      `;
+
+      const links = document.createElement("div");
+      links.className = "links";
+
+      function renderStandardLinks(){
+        links.innerHTML = "";
+        renderLinksFromObject(links, options.projectLinksObj || {});
+      }
+
+      function renderSevenSelector(groupsObj){
+        links.innerHTML = "";
+
+        const title = document.createElement("div");
+        title.className = "subproj-title";
+        title.textContent = "SELECT AREA";
+        links.appendChild(title);
+
+        const selector = document.createElement("div");
+        selector.className = "subproj-wrap";
+
+        const actionsWrap = document.createElement("div");
+        actionsWrap.style.width = "100%";
+        actionsWrap.style.display = "flex";
+        actionsWrap.style.flexWrap = "wrap";
+        actionsWrap.style.gap = "8px";
+
+        function buildActions(branch){
+          actionsWrap.innerHTML = "";
+          const obj = (groupsObj[branch] && groupsObj[branch].LINKS) ? groupsObj[branch].LINKS : {};
+          renderLinksFromObject(actionsWrap, obj);
+        }
+
+        Object.keys(groupsObj || {}).forEach(branch=>{
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "subproj-btn";
+          b.textContent = branch;
+
+          b.addEventListener("click", ()=>{
+            Array.from(selector.querySelectorAll(".subproj-btn")).forEach(x=>x.classList.remove("active"));
+            b.classList.add("active");
+            buildActions(branch);
+          });
+
+          selector.appendChild(b);
+        });
+
+        links.appendChild(selector);
+        links.appendChild(actionsWrap);
+        selector.querySelector(".subproj-btn")?.click();
+      }
+
+      btn.onclick = () => {
+        requirePasswordBeforeOpen(name, () => {
+          card.classList.toggle("open");
+          if (card.classList.contains("open")) {
+            if (options.isSeven) renderSevenSelector(options.sevenBranchesObj || {});
+            else if (options.isUseful) renderUsefulOptions(links, options.usefulOptions || []);
+            else renderStandardLinks();
+          }
+        });
+      };
+
+      card.appendChild(btn);
+      card.appendChild(links);
+      return card;
+    }
+
+    function renderUsefulForYear(year){
+      usefulWrap.innerHTML = "";
+      const cfg = YEARS[year];
+      if (!cfg?.USEFUL) {
+        usefulWrap.classList.add("hidden");
+        return;
+      }
+      usefulWrap.classList.remove("hidden");
+
+      const usefulCard = createProjectCard(cfg.USEFUL.TITLE, {
+        isUseful: true,
+        usefulOptions: cfg.USEFUL.OPTIONS || []
+      });
+
+      usefulWrap.appendChild(usefulCard);
+    }
+
+    function renderNonHaramainYear(year){
+      const cfg = YEARS[year];
+      renderUsefulForYear(year);
+
+      topRow.innerHTML = "";
+      projectsContainer.innerHTML = "";
+      document.getElementById("linksChip").textContent = "Links";
+
+      topRow.appendChild(
+        createProjectCard(cfg.TOTAL.TITLE, { isTotal:true, projectLinksObj: cfg.TOTAL.LINKS })
+      );
+
+      topRow.appendChild(
+        makeCenterBadge([
+          "PROJECT SAFETY REPORTING CENTER",
+          "REAL-TIME HSE DATA",
+          "UNIFIED ACCESS FOR ALL PROJECTS",
+          "ALL PROJECTS • ONE PLACE"
+        ])
+      );
+
+      topRow.appendChild(
+        createProjectCard(cfg.DASHBOARD.TITLE, { isDashboard:true, projectLinksObj: cfg.DASHBOARD.LINKS })
+      );
+
+      const projCfg = cfg.PROJECTS || {};
+      const names = Object.keys(projCfg)
+        .filter(n => n !== "SEVEN")
+        .sort((a,b)=>a.localeCompare(b));
+
+      const cards = [];
+
+      if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
+        cards.push(
+          createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
+        );
+      }
+
+      names.forEach(pname=>{
+        cards.push(
+          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
+        );
+      });
+
+      if (cards.length % 3 === 1) {
+        const last = cards.pop();
+        cards.forEach(c => projectsContainer.appendChild(c));
+        projectsContainer.appendChild(makeInvisiblePlaceholder());
+        projectsContainer.appendChild(last);
+        projectsContainer.appendChild(makeInvisiblePlaceholder());
+      } else {
+        cards.forEach(c => projectsContainer.appendChild(c));
+      }
+    }
+
+    function renderHaramainYear(year){
+      const cfg = HARAMAIN_YEARS[year];
+      usefulWrap.classList.add("hidden");
+
+      haramainTopRow.innerHTML = "";
+      haramainProjects.innerHTML = "";
+      document.getElementById("linksChip").textContent = "Links";
+
+      haramainTopRow.appendChild(
+        createProjectCard(cfg.TOTAL.TITLE, { isTotal:true, projectLinksObj: cfg.TOTAL.LINKS })
+      );
+
+      haramainTopRow.appendChild(
+        makeCenterBadge([
+          "HARAMAIN SAFETY REPORTING CENTER",
+          "REAL-TIME HSE DATA",
+          "UNIFIED ACCESS FOR HARAMAIN",
+          "HARAMAIN • ONE PLACE"
+        ])
+      );
+
+      haramainTopRow.appendChild(
+        createProjectCard(cfg.DASHBOARD.TITLE, { isDashboard:true, projectLinksObj: cfg.DASHBOARD.LINKS })
+      );
+
+      const projCfg = cfg.PROJECTS || {};
+      const names = Object.keys(projCfg).sort((a,b)=>a.localeCompare(b));
+
+      const cards = [];
+      names.forEach(pname=>{
+        cards.push(
+          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
+        );
+      });
+
+      if (cards.length % 3 === 1) {
+        const last = cards.pop();
+        cards.forEach(c => haramainProjects.appendChild(c));
+        haramainProjects.appendChild(makeInvisiblePlaceholder());
+        haramainProjects.appendChild(last);
+        haramainProjects.appendChild(makeInvisiblePlaceholder());
+      } else {
+        cards.forEach(c => haramainProjects.appendChild(c));
+      }
+    }
+
+     const yearToggle = document.getElementById("yearToggle");
+    const yearButtons = Array.from(yearToggle.querySelectorAll(".year-btn"));
+
+    function setYearUI(year){
+      yearButtons.forEach(b => b.classList.toggle("active", b.dataset.year === year));
+      yearSelect.value = year;
+
+      if (CURRENT_PAGE === "haramain") renderHaramainYear(year);
+      else renderNonHaramainYear(year);
+
+      document.getElementById("searchInput").value = "";
+    }
+
+    yearButtons.forEach(btn=>{
+      btn.addEventListener("click", ()=> setYearUI(btn.dataset.year));
+    });
+
+    const pageToggle = document.getElementById("pageToggle");
+    const pageButtons = Array.from(pageToggle.querySelectorAll(".page-btn"));
+
+    function setPageUI(page){
+      CURRENT_PAGE = page;
+      pageButtons.forEach(b => b.classList.toggle("active", b.dataset.page === page));
+
+      const isHaramain = (page === "haramain");
+      pageNonHaramain.classList.toggle("show", !isHaramain);
+      pageHaramain.classList.toggle("show", isHaramain);
+
+      setYearUI(yearSelect.value || "2025");
+    }
+
+    pageButtons.forEach(btn=>{
+      btn.addEventListener("click", ()=> setPageUI(btn.dataset.page));
+    });
+
+    /* ===== Search per current page ===== */
+    document.getElementById("searchInput").addEventListener("input", (e)=>{
+      const q = e.target.value.trim().toLowerCase();
+      const container = (CURRENT_PAGE === "haramain") ? haramainProjects : projectsContainer;
+      const allProjectCards = Array.from(container.querySelectorAll(".project:not(.placeholder)"));
+      allProjectCards.forEach(card=>{
+        const name = card.getAttribute("data-name") || "";
+        card.style.display = name.includes(q) ? "" : "none";
+      });
+    });
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", (e)=>{
+      const key = e.key.toLowerCase();
+      if (e.key === "F12") { e.preventDefault(); return; }
+      if (e.ctrlKey && ["u","s","p"].includes(key)) { e.preventDefault(); return; }
+      if (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key)) { e.preventDefault(); return; }
+    });
+
+      setYearUI("2025");
+    
+(function(){
+  const btn = document.getElementById("contactBtn");
+  if(!btn) return;
+
+  const supportEmail = "ibrahim.almalki@sbg.com.sa";
+  const ccEmail = "wael.abdelghany@sbg.com.sa";
+
+  btn.addEventListener("click", ()=>{
+    const subject = encodeURIComponent("HSE Data Portal Support");
+    const body = encodeURIComponent(
+      "Dear Mr. Ibrahim Almalki,\n\n" +
+      "I need support regarding HSE Data Portal.\n\n" +
+      "Issue: \n" +
+      "Project: \n" +
+      "Year: \n\n"    );
+
+    const mailto =
+      `mailto:${supportEmail}?cc=${encodeURIComponent(ccEmail)}&subject=${subject}&body=${body}`;
+
+    window.open(mailto, "_self");
   });
+})();
 
-  usefulWrap.appendChild(usefulCard);
-}
+
+  </script>
+</body>
+</html>
