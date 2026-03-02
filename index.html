@@ -1116,15 +1116,32 @@ USEFUL: {
  "Governmental Violations": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDJPammwTp9SYLaV7Q3l6U9ASDR9P09d8b5T1YheVenCRg?e=rboJzA"
           } },
            
-            "TAIBA":         { LINKS:
-          { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDgCF9DW14QSa7l9N0gfxELAbqc0JnQ_ez8tU_pbWPupZM?e=M3eD5o",
-            "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDnpT7w2s5BSKwrg5qppnqsATbjiioff7aWV_YuwUiIz_I?e=FyiTlx",
-            "KPIs": "https://sbgo365-my.sharepoint.com/:f:/g/personal/ibrahim_almalki_sbg_com_sa/IgArhP9oQuB0S6R1KERXB6vrAUOSDnPr7dEdcBzKieKHW_U?e=4ZTax1",
-            "OBSERVATION": "https://docs.google.com/spreadsheets/d/1X9ouVBUWlNPCUGilzCtgDOE7gJzAR9WgCqVwRSKT7qQ/edit?usp=sharing",
-            "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDPZc-EYHaIRba_CF34K3QyAWtK2yB1A8GjNjrQj8RRmNw?email=mansor.alsharif%40sbg.com.sa&e=roObTr",
-            "DAILY ATTENDANCE": "#",
- "Governmental Violations": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAY5scFlJ6hQ6kKtb9SBj3VAef6V7qfS4KRbvlsWkTXiJU?e=v20K8R"
-          } },
+           "TAIBA": {
+  BRANCHES: {
+    "INFRASTRUCTURE": {
+      LINKS: {
+        "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDgCF9DW14QSa7l9N0gfxELAbqc0JnQ_ez8tU_pbWPupZM?e=M3eD5o",
+        "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDnpT7w2s5BSKwrg5qppnqsATbjiioff7aWV_YuwUiIz_I?e=FyiTlx",
+        "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBVcvVRaV_ATbp2DpQkaPIbAeBJV57njkl96LX4No1ZpoA?e=QQd9Lh",
+        "OBSERVATION": "https://docs.google.com/spreadsheets/d/1X9ouVBUWlNPCUGilzCtgDOE7gJzAR9WgCqVwRSKT7qQ/edit?usp=sharing",
+        "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDPZc-EYHaIRba_CF34K3QyAWtK2yB1A8GjNjrQj8RRmNw?email=mansor.alsharif%40sbg.com.sa&e=roObTr",
+        "DAILY ATTENDANCE": "#",
+        "Governmental Violations": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAY5scFlJ6hQ6kKtb9SBj3VAef6V7qfS4KRbvlsWkTXiJU?e=v20K8R"
+      }
+    },
+    "FACULTY OF MEDICINE": {
+      LINKS: {
+        "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDgCF9DW14QSa7l9N0gfxELAbqc0JnQ_ez8tU_pbWPupZM?e=M3eD5o",
+        "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDnpT7w2s5BSKwrg5qppnqsATbjiioff7aWV_YuwUiIz_I?e=FyiTlx",
+        "KPIs": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCthG8mjXklRoQ9SY_PwqWBAYdQAPJpCraBjquqmMc2RfI?e=Kls08t",
+        "OBSERVATION": "https://docs.google.com/spreadsheets/d/1X9ouVBUWlNPCUGilzCtgDOE7gJzAR9WgCqVwRSKT7qQ/edit?usp=sharing",
+        "ARCHIVING": "https://sbgo365-my.sharepoint.com/:f:/g/personal/hse_director_office_sbg_com_sa/IgDPZc-EYHaIRba_CF34K3QyAWtK2yB1A8GjNjrQj8RRmNw?email=mansor.alsharif%40sbg.com.sa&e=roObTr",
+        "DAILY ATTENDANCE": "#",
+        "Governmental Violations": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAY5scFlJ6hQ6kKtb9SBj3VAef6V7qfS4KRbvlsWkTXiJU?e=v20K8R"
+      }
+    }
+  }
+},
 
 
           "SEVEN": {
@@ -1692,17 +1709,24 @@ USEFUL: {
 
       const cards = [];
 
-      if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
-        cards.push(
-          createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
-        );
-      }
+     if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
+  cards.push(
+    createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
+  );
+}
+
+if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
+  cards.push(
+    createProjectCard("TAIBA", { isSeven: true, sevenBranchesObj: projCfg["TAIBA"].BRANCHES })
+  );
+}
 
       names.forEach(pname=>{
-        cards.push(
-          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
-        );
-      });
+  if (year === "2026" && pname === "TAIBA") return;
+  cards.push(
+    createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
+  );
+});
 
       if (cards.length % 3 === 1) {
         const last = cards.pop();
