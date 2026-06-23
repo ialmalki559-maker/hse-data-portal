@@ -783,14 +783,14 @@
     const YEARS = {
       "2025": {
         PASSWORDS: {
-        "CFD": "ahmed001",
+        "CFD": "faiz001",
           "KFSH": "esam003",
           "KFSC": "mohammed002",
           "KSU": "hasan002",
           "DIRAB": "tamer002",
           "JEDDAH TOWER": "tim003",
           "SANG JEDDAH": "sari003",
-          "SANG QASSIM": "faisal005",
+          "SANG QASSIM": "rayan005",
           "SANG TAIF": "ibrahim006",
           "HHR": "ahmed009",
           "VALINA": "roshan008",
@@ -923,14 +923,14 @@
 
       "2026": {
         PASSWORDS: {
-          "CFD": "ahmed001",
+          "CFD": "faiz001",
           "KFSH": "esam003",
           "KFSC": "mohammed002",
           "KSU": "hasan002",
           "DIRAB": "tamer002",
           "JEDDAH TOWER": "tim003",
           "SANG JEDDAH": "sari003",
-          "SANG QASSIM": "faisal005",
+          "SANG QASSIM": "rayan005",
           "SANG TAIF": "ibrahim006",
           "SANG HAIL": "hail004",
           "HHR": "ahmed009",
@@ -953,7 +953,7 @@ USEFUL: {
   LINKS: {
     "HSE OBSERVATION": "https://forms.gle/pECDRjkyosaKc8nA7",
     "HSE PROCEDURE": "#",
-    "HSE FORM": "https://sbgo365.sharepoint.com/:f:/s/HSEContracting/IgBXfRMEn4OnQoY-Q_0j-iB6AUuQAyJNQqvVg-G-qevS7u4?e=u7nK7X",
+    "HSE FORM": "https://sbgo365.sharepoint.com/:f:/s/HSEContracting/IgBXfRMEn4OnQoY-Q_0j-iB6AUuQAyJNQqvVg-G-qevS7u4?e=0zqNDs",
     "HSE TRAINING": "#"
   }
 },
@@ -1543,7 +1543,7 @@ USEFUL: {
       }
     }
 
-    function renderUsefulOptions(linksContainer, optionsArr){
+    function renderUsefulOptions(linksContainer, optionsArr, linksObj){
       linksContainer.innerHTML = "";
 
       const title = document.createElement("div");
@@ -1554,27 +1554,21 @@ USEFUL: {
       const wrap = document.createElement("div");
       wrap.className = "useful-vertical";
 
-      function setActive(btn){
-        Array.from(wrap.querySelectorAll(".subproj-btn")).forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-        localStorage.setItem("useful_selected_option", btn.textContent);
-      }
-
       optionsArr.forEach(name=>{
+        const url = linksObj && linksObj[name] ? linksObj[name] : "#";
         const b = document.createElement("button");
         b.type = "button";
         b.className = "subproj-btn";
         b.textContent = name;
-        b.addEventListener("click", ()=> setActive(b));
+        b.addEventListener("click", ()=>{
+          Array.from(wrap.querySelectorAll(".subproj-btn")).forEach(x=>x.classList.remove("active"));
+          b.classList.add("active");
+          if(url && url !== "#") window.open(url, "_blank");
+        });
         wrap.appendChild(b);
       });
 
       linksContainer.appendChild(wrap);
-
-      const saved = localStorage.getItem("useful_selected_option");
-      const btns = wrap.querySelectorAll(".subproj-btn");
-      const found = Array.from(btns).find(b => b.textContent === saved);
-      (found || btns[0])?.click();
     }
 
     function createProjectCard(name, options = {}){
@@ -1659,7 +1653,7 @@ USEFUL: {
           card.classList.toggle("open");
           if (card.classList.contains("open")) {
             if (options.isSeven) renderSevenSelector(options.sevenBranchesObj || {});
-            else if (options.isUseful) renderUsefulOptions(links, options.usefulOptions || []);
+            else if (options.isUseful) renderUsefulOptions(links, options.usefulOptions || [], options.usefulLinks || {});
             else renderStandardLinks();
           }
         });
@@ -1681,7 +1675,8 @@ USEFUL: {
 
       const usefulCard = createProjectCard(cfg.USEFUL.TITLE, {
         isUseful: true,
-        usefulOptions: cfg.USEFUL.OPTIONS || []
+        usefulOptions: cfg.USEFUL.OPTIONS || [],
+        usefulLinks: cfg.USEFUL.LINKS || {}
       });
 
       usefulWrap.appendChild(usefulCard);
