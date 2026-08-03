@@ -29,42 +29,42 @@
 
     *{box-sizing:border-box}
 
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      min-width: 1100px;
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  min-width: 1100px;
 
-      background:
-        radial-gradient(1200px 700px at 10% -10%, #1B5A3D 0%, transparent 60%),
-        radial-gradient(900px 650px at 110% 0%, #17704B 0%, transparent 55%),
-        radial-gradient(900px 650px at 50% 110%, #1C8A5B 0%, transparent 55%),
-        var(--bg);
+  background:
+    radial-gradient(1200px 700px at 10% -10%, #A7F3C0 0%, transparent 60%),
+    radial-gradient(900px 650px at 110% 0%, #86EFAC 0%, transparent 55%),
+    radial-gradient(900px 650px at 50% 110%, #6EE7A8 0%, transparent 55%),
+    #C9F7DA;
 
-      color:var(--text);
-      padding:16px;
+  color:var(--text);
+  padding:16px;
 
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
     .header{
-      position: sticky; top:0; z-index:10;
-      background: linear-gradient(180deg, rgba(11,30,20,.98), rgba(11,30,20,.85), transparent);
-      padding:8px 4px 14px 4px;
-      backdrop-filter: blur(6px);
-    }
+  position: sticky; top:0; z-index:10;
+  background: linear-gradient(180deg, rgba(233,251,239,.96), rgba(214,245,226,.72), transparent);
+  padding:8px 4px 14px 4px;
+  backdrop-filter: blur(6px);
+}
 
     .title{
-      display:flex; align-items:center; gap:12px;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-      padding:8px 10px;
-      background:var(--bg-soft);
-      border:1px solid #123626;
-      border-radius:14px;
-      box-shadow: var(--shadow-soft);
-    }
+  display:flex; align-items:center; gap:12px;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding:8px 10px;
+  background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
+  border:1px solid #8FD9AB;
+  border-radius:14px;
+  box-shadow: 0 8px 22px rgba(16,75,48,.10);
+}
 
  
     .text-logo{
@@ -126,10 +126,15 @@
     .heading{ display:flex; flex-direction:column; gap:2px; }
 
     .dept-title{
-      font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
-      color: var(--text);
-      text-shadow: 0 2px 6px rgba(0,0,0,.35);
-      line-height:1.1; margin-bottom: 0;
+  font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
+  color: #0A3D26;
+  text-shadow: none;
+  line-height:1.1; margin-bottom: 0;
+}
+
+h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D26; }
+
+.subtitle{ font-size:12px; color:#2E6B4C; margin-top:2px; }
     }
 
     h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; }
@@ -148,8 +153,13 @@
     .toolbar-right{ display:flex; justify-content:flex-end; }
 
     .search{
-      flex:1; display:flex; align-items:center; gap:8px; background:var(--bg-soft);
-      border:1px solid #14402D; border-radius:12px; padding:8px 10px;
+  flex:1; display:flex; align-items:center; gap:8px; background:#FFFFFF;
+  border:1px solid #8FD9AB; border-radius:12px; padding:8px 10px;
+}
+.search input{
+  width:100%; border:0; outline:none; background:transparent; color:#0A3D26;
+  font-size:14px; -webkit-user-select: text; user-select: text;
+}
     }
     .search input{
       width:100%; border:0; outline:none; background:transparent; color:var(--text);
@@ -260,11 +270,12 @@
     .project.open .chev{ transform: rotate(180deg); }
 
     .links{
-      display:none; padding:12px; background: rgba(6,20,14,.9);
-      border-top:1px solid #164733;
-      gap:8px;
-      flex-wrap:wrap;
-    }
+  display:none; padding:12px;
+  background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
+  border-top:1px solid #B7E7C9;
+  gap:8px;
+  flex-wrap:wrap;
+}
     .project.open .links{ display:flex; }
 
     .link-btn{
@@ -923,7 +934,7 @@
 
       "2026": {
         PASSWORDS: {
-          "CFD": "faiz001",
+          "CFD": "ahmed001",
           "KFSH": "esam003",
           "KFSC": "mohammed002",
           "KSU": "hasan002",
@@ -934,7 +945,7 @@
           "SANG TAIF": "ibrahim006",
           "SANG HAIL": "hail004",
           "SANG MADINA": "ayman007",
-          "SANG YANBU": "0000",
+          "SANG YANBU": "ayman007",
           "HHR": "ahmed009",
           "VALINA": "roshan008",
           "KAIA": "ahmed003",
