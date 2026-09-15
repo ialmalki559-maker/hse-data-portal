@@ -29,44 +29,43 @@
 
     *{box-sizing:border-box}
 
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  min-width: 1100px;
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      min-width: 900px;
 
-  background:
-    radial-gradient(1200px 700px at 10% -10%, #A7F3C0 0%, transparent 60%),
-    radial-gradient(900px 650px at 110% 0%, #86EFAC 0%, transparent 55%),
-    radial-gradient(900px 650px at 50% 110%, #6EE7A8 0%, transparent 55%),
-    #C9F7DA;
+      background:
+        radial-gradient(1200px 700px at 10% -10%, #A7F3C0 0%, transparent 60%),
+        radial-gradient(900px 650px at 110% 0%, #86EFAC 0%, transparent 55%),
+        radial-gradient(900px 650px at 50% 110%, #6EE7A8 0%, transparent 55%),
+        #C9F7DA;
 
-  color:var(--text);
-  padding:16px;
+      color:var(--text);
+      padding:16px;
 
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
 
     .header{
-  position: sticky; top:0; z-index:10;
-  background: linear-gradient(180deg, rgba(233,251,239,.96), rgba(214,245,226,.72), transparent);
-  padding:8px 4px 14px 4px;
-  backdrop-filter: blur(6px);
-}
+      position: sticky; top:0; z-index:10;
+      background: linear-gradient(180deg, rgba(233,251,239,.96), rgba(214,245,226,.72), transparent);
+      padding:8px 4px 14px 4px;
+      backdrop-filter: blur(6px);
+    }
 
     .title{
-  display:flex; align-items:center; gap:12px;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  padding:8px 10px;
-  background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
-  border:1px solid #8FD9AB;
-  border-radius:14px;
-  box-shadow: 0 8px 22px rgba(16,75,48,.10);
-}
+      display:flex; align-items:center; gap:12px;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      padding:8px 10px;
+      background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
+      border:1px solid #8FD9AB;
+      border-radius:14px;
+      box-shadow: 0 8px 22px rgba(16,75,48,.10);
+    }
 
- 
     .text-logo{
       text-align:left;
       padding:6px 8px;
@@ -126,20 +125,15 @@ body{
     .heading{ display:flex; flex-direction:column; gap:2px; }
 
     .dept-title{
-  font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
-  color: #0A3D26;
-  text-shadow: none;
-  line-height:1.1; margin-bottom: 0;
-}
-
-h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D26; }
-
-.subtitle{ font-size:12px; color:#2E6B4C; margin-top:2px; }
+      font-size:22px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase;
+      color: #0A3D26;
+      text-shadow: none;
+      line-height:1.1; margin-bottom: 0;
     }
 
-    h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; }
-    .subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+    h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D26; }
 
+    .subtitle{ font-size:12px; color:#2E6B4C; margin-top:2px; }
 
     .toolbar{
       margin-top:10px;
@@ -153,16 +147,11 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     .toolbar-right{ display:flex; justify-content:flex-end; }
 
     .search{
-  flex:1; display:flex; align-items:center; gap:8px; background:#FFFFFF;
-  border:1px solid #8FD9AB; border-radius:12px; padding:8px 10px;
-}
-.search input{
-  width:100%; border:0; outline:none; background:transparent; color:#0A3D26;
-  font-size:14px; -webkit-user-select: text; user-select: text;
-}
+      flex:1; display:flex; align-items:center; gap:8px; background:#FFFFFF;
+      border:1px solid #8FD9AB; border-radius:12px; padding:8px 10px;
     }
     .search input{
-      width:100%; border:0; outline:none; background:transparent; color:var(--text);
+      width:100%; border:0; outline:none; background:transparent; color:#0A3D26;
       font-size:14px; -webkit-user-select: text; user-select: text;
     }
 
@@ -270,12 +259,12 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     .project.open .chev{ transform: rotate(180deg); }
 
     .links{
-  display:none; padding:12px;
-  background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
-  border-top:1px solid #B7E7C9;
-  gap:8px;
-  flex-wrap:wrap;
-}
+      display:none; padding:12px;
+      background: linear-gradient(180deg, #DFF6E8, #CFEFDC);
+      border-top:1px solid #B7E7C9;
+      gap:8px;
+      flex-wrap:wrap;
+    }
     .project.open .links{ display:flex; }
 
     .link-btn{
@@ -292,7 +281,7 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     .link-btn.disabled{
       opacity:.45; cursor:not-allowed; filter:saturate(.4); transform:none !important;
     }
- 
+
     .subproj-wrap{
       width:100%;
       display:flex;
@@ -360,7 +349,6 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     .sig-name{ color: var(--accent); font-weight: 900; }
     .sig-dot{ opacity:.7; }
 
- 
     .pw-overlay{
       position: fixed; inset:0; background: rgba(0,0,0,.55);
       display:none; align-items:center; justify-content:center;
@@ -562,7 +550,7 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     .page{ display:none; }
     .page.show{ display:block; }
 
-      .useful-wrap{
+    .useful-wrap{
       position: fixed;
       left: 14px;
       bottom: 12px;
@@ -654,23 +642,25 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
       flex:0 0 auto;
       min-width:0;
     }
-#linksChip { display: none !important; }
-#contactBtn{
-  position: relative;
-  overflow: hidden;
-  animation: supportPulse 1.6s ease-in-out infinite;
-}
 
-@keyframes supportPulse{
-  0%, 100%{
-    box-shadow: 0 0 0 rgba(34,197,94,0.0);
-    transform: translateY(0);
-  }
-  50%{
-    box-shadow: 0 0 22px rgba(34,197,94,0.45);
-    transform: translateY(-1px);
-  }
-}
+    #linksChip { display: none !important; }
+
+    #contactBtn{
+      position: relative;
+      overflow: hidden;
+      animation: supportPulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes supportPulse{
+      0%, 100%{
+        box-shadow: 0 0 0 rgba(34,197,94,0.0);
+        transform: translateY(0);
+      }
+      50%{
+        box-shadow: 0 0 22px rgba(34,197,94,0.45);
+        transform: translateY(-1px);
+      }
+    }
 
   </style>
 </head>
@@ -683,11 +673,9 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
 
         <div class="text-logo-en-wrap">
           <div class="text-logo-en">SAUDI BINLADIN GROUP</div>
-                  </div>
+        </div>
 
-        <div class="text-logo-subrow">
-         
-                            </div>
+        <div class="text-logo-subrow"></div>
       </div>
 
       <div class="heading">
@@ -723,11 +711,9 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
           <option value="2026">2026</option>
         </select>
       </div>
-<div class="toolbar-right">
-   <button class="chip" id="contactBtn" type="button">✉️ CONTACT SUPPORT</button>
-</div>
 
       <div class="toolbar-right">
+        <button class="chip" id="contactBtn" type="button">✉️ CONTACT SUPPORT</button>
         <div class="chip" id="linksChip">Links</div>
       </div>
     </div>
@@ -749,7 +735,7 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
 
   <div class="signature">
     Developed by <span class="sig-name">Ibrahim Almalki</span> ✦
-    <span class="sig-dot">•</span> Version 2.3
+    <span class="sig-dot">•</span> Version 2.4
   </div>
 
   <!-- Useful Links (Non Haramain 2026 only) -->
@@ -777,7 +763,7 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
   </div>
 
   <script>
-   
+
     function syncLogoWidth(){
       const logo = document.querySelector('.text-logo');
       const enWrap = document.querySelector('.text-logo-en-wrap');
@@ -788,13 +774,24 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
     window.addEventListener('load', syncLogoWidth);
     window.addEventListener('resize', syncLogoWidth);
 
+    /* ===== Universal link opener (works inside SharePoint) ===== */
+    function openUrl(url){
+      if(!url || url === "#") return;
+      var w = null;
+      try { w = window.open(url, "_blank", "noopener"); } catch(e){ w = null; }
+      if(!w){
+        try { window.top.location.href = url; }
+catch(e){ window.location.href = url; }
+      }
+    }
+
     const ORDER = ["NCR","INCIDENT/NEAR MISS LOG","KPIs","OBSERVATION","ARCHIVING","DAILY ATTENDANCE","DAILY ATTANDANCE"];
 
 
     const YEARS = {
       "2025": {
         PASSWORDS: {
-        "CFD": "ahmed004",
+          "CFD": "ahmed004",
           "KFSH": "esam003",
           "KFSC": "mohammed002",
           "KSU": "hasan002",
@@ -811,181 +808,182 @@ h1{ font-size:18px; margin:0; letter-spacing:.4px; font-weight:800; color:#0A3D2
         },
 
         TOTAL: {
-  TITLE: "TOTAL FOR ALL PROJECTS",
-  LINKS: {
-    "NCR": "#",
-    "INCIDENT/NEAR MISS LOG": "#",
-    "KPIs": "#",
-    "OBSERVATION": "#"
-  }
-},
+          TITLE: "TOTAL FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT/NEAR MISS LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#"
+          }
+        },
 
-DASHBOARD: {
-  TITLE: "DASHBOARD FOR ALL PROJECTS",
-  LINKS: {
-    "NCR": "#",
-    "INCIDENT/NEAR MISS LOG": "#",
-    "KPIs": "#",
-    "OBSERVATION": "#"
-  }
-},
+        DASHBOARD: {
+          TITLE: "DASHBOARD FOR ALL PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT/NEAR MISS LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#"
+          }
+        },
 
-PROJECTS: {
-  "CFD": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+        PROJECTS: {
+          "CFD": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "KFSH": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "KFSH": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "KFSC": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "KFSC": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "KSU": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "KSU": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "DIRAB": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "DIRAB": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "JEDDAH TOWER": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "JEDDAH TOWER": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "SANG JEDDAH": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "SANG JEDDAH": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "SANG QASSIM": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "SANG QASSIM": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "SANG TAIF": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "SANG TAIF": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "HHR": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "HHR": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "VALINA": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "VALINA": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "KAIA": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "KAIA": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "TAIBA": {
-    LINKS: {
-      "NCR": "#",
-      "INCIDENT/NEAR MISS LOG": "#",
-      "KPIs": "#",
-      "OBSERVATION": "#",
-      "ARCHIVING": "#"
-    }
-  },
+          "TAIBA": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#"
+            }
+          },
 
-  "SEVEN": {
-    BRANCHES: {
-      "DAMMAM": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#"
+          "SEVEN": {
+            BRANCHES: {
+              "DAMMAM": {
+                LINKS: {
+                  "NCR": "#",
+                  "INCIDENT/NEAR MISS LOG": "#",
+                  "KPIs": "#",
+                  "OBSERVATION": "#",
+                  "ARCHIVING": "#"
+                }
+              },
+
+              "KHOBAR": {
+                LINKS: {
+                  "NCR": "#",
+                  "INCIDENT/NEAR MISS LOG": "#",
+                  "KPIs": "#",
+                  "OBSERVATION": "#",
+                  "ARCHIVING": "#"
+                }
+              }
+            }
+          }
         }
       },
 
-      "KHOBAR": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#"
-        }
-      }
-    }
-  },
-},
-},
       "2026": {
         PASSWORDS: {
           "CFD": "ahmed004",
@@ -1005,26 +1003,27 @@ PROJECTS: {
           "KAIA": "ahmed003",
           "TAIBA": "ayman007",
           "SEVEN": "ahmed001",
-          "Capital Upgrade System": "ayman007"
+          "Capital Upgrade System": "ayman007",
+          "AJYAD": "anas009"
         },
 
-USEFUL: {
-  TITLE: "USEFUL LINKS",
+        USEFUL: {
+          TITLE: "USEFUL LINKS",
 
-  OPTIONS: [
-    "HSE OBSERVATION",
-    "HSE PROCEDURE",
-    "HSE FORM",
-    "HSE TRAINING"
-  ],
+          OPTIONS: [
+            "HSE OBSERVATION",
+            "HSE PROCEDURE",
+            "HSE FORM",
+            "HSE TRAINING"
+          ],
 
-  LINKS: {
-    "HSE OBSERVATION": "https://forms.gle/pECDRjkyosaKc8nA7",
-    "HSE PROCEDURE": "#",
-    "HSE FORM": "https://sbgo365.sharepoint.com/:f:/s/HSEContracting/IgBXfRMEn4OnQoY-Q_0j-iB6AUuQAyJNQqvVg-G-qevS7u4?e=0zqNDs",
-    "HSE TRAINING": "#"
-  }
-},
+          LINKS: {
+            "HSE OBSERVATION": "https://forms.gle/pECDRjkyosaKc8nA7",
+            "HSE PROCEDURE": "#",
+            "HSE FORM": "https://sbgo365.sharepoint.com/:f:/s/HSEContracting/IgBXfRMEn4OnQoY-Q_0j-iB6AUuQAyJNQqvVg-G-qevS7u4?e=0zqNDs",
+            "HSE TRAINING": "#"
+          }
+        },
 
 
         TOTAL: {
@@ -1036,9 +1035,6 @@ USEFUL: {
             "OBSERVATION": "#",
             "DAILY ATTANDANCE": "#",
             "Governmental Violations": "#"
-          
-           
-
           }
         },
 
@@ -1049,7 +1045,7 @@ USEFUL: {
             "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/personal/ibrahim_almalki_sbg_com_sa/_layouts/15/Doc.aspx?sourcedoc={11549060-fd7b-4280-8413-7e7dca7318c1}&action=embedview&AllowTyping=True&wdAllowInteractivity=True&wdHideGridlines=True&wdHideHeaders=True",
             "KPIs": "https://sbgo365-my.sharepoint.com/personal/ibrahim_almalki_sbg_com_sa/_layouts/15/Doc.aspx?sourcedoc={22fc1d16-8df0-46ed-9f97-52939250980a}&action=embedview&AllowTyping=True&wdAllowInteractivity=True",
             "OBSERVATION": "https://app.powerbi.com/groups/me/reports/2ddab3d7-92b8-4c2b-8544-972ada089e94/72740ff481006c5e0726?ctid=9affbb38-3096-4eb1-bcac-4b709bedc8af&experience=power-bi",
-              "Governmental Violations": "#"
+            "Governmental Violations": "#"
           }
         },
 
@@ -1172,6 +1168,7 @@ USEFUL: {
  "Governmental Violations": "#",
  "DAILY ATTENDANCE": "#"
 } },
+
           "SANG YANBU":    { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAmdMDoLzEYQ5ehaIOBOtOZAUKgVvJZkeT-5v7trhABiac?e=BfzDq8",
             "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBvVQ9UNncJT47KELJYVvPfAV4bPuFmpYBUiRavsqOZPrg?e=ptO3h8",
@@ -1213,6 +1210,7 @@ USEFUL: {
             "DAILY ATTENDANCE": "#",
  "Governmental Violations": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDJPammwTp9SYLaV7Q3l6U9ASDR9P09d8b5T1YheVenCRg?e=rboJzA"
           } },
+
            "Capital Upgrade System":    { LINKS:
           { "NCR": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQC7iTTbhltAS7oyPzLz3MFEAdul2WOtKNPfcmolPF7uBVE?e=nfwRqG",
             "INCIDENT/NEAR MISS LOG": "https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQArbRHSDep5TJEBpHR0qW6oAaXu5-I5437ry_oA-TDECzc?e=KVWFxV",
@@ -1224,7 +1222,7 @@ USEFUL: {
  "DAILY ATTENDANCE": "#"
 } },
 
-           
+
            "TAIBA": {
   BRANCHES: {
     "INFRASTRUCTURE": {
@@ -1252,6 +1250,8 @@ USEFUL: {
   }
 },
 
+          "AJYAD": { LINKS: { "NCR":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBNUt5KPfN-SpNFPxCoXa-4AeOcHj-Dvh696E5ciXnBBA0?e=1Nrvrd","INCIDENT/NEAR MISS LOG":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQCZ_8BSVR3gRYZoxOUDLyHVATOgWNqRePLiclHFOVnqDnE?e=y34Ggj","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBw3uKeUFk4SZVUJ7O_iJGsAT0msMU44eFVlUbZGaYWNdI?e=iJd4UF","OBSERVATION":"#", "Governmental Violations": "#" }
+        },
 
           "SEVEN": {
             BRANCHES: {
@@ -1269,163 +1269,161 @@ USEFUL: {
       }
     };
 
-   
+
     function haramainProjectLinksPlaceholder(){
       return { "NCR":"#","INCIDENT LOG":"#","KPIs":"#","OBSERVATION":"#","ARCHIVING":"#","DAILY ATTENDANCE":"#" };
     }
 
     const HARAMAIN_YEARS = {
-  "2025": {
-    PASSWORDS: {
-      "HARAM BUILDING (HB)": "mohammed003",
-      "PIAZZA": "mohammed002",
-      "SERVICE BUILDING (SVB)": "ahmed008",
-      "PEDESTRAIN TUNNELS": "braa006",
-      "CUC": "braa005",
-      "MARWA BRIDGE": "ibrahim001",
-      "MATAF": "irfan004",
-      "AJYAD & ALMASAA": "anas009",
-      "FRR": "mohammed007"
-    },
+      "2025": {
+        PASSWORDS: {
+          "HARAM BUILDING (HB)": "mohammed003",
+          "PIAZZA": "mohammed002",
+          "SERVICE BUILDING (SVB)": "ahmed008",
+          "PEDESTRAIN TUNNELS": "braa006",
+          "CUC": "braa005",
+          "MARWA BRIDGE": "ibrahim001",
+          "MATAF": "irfan004",
+          "AJYAD & ALMASAA": "anas009",
+          "FRR": "mohammed007"
+        },
 
-    TOTAL: {
-      TITLE: "TOTAL FOR HARAMAIN PROJECTS",
-      LINKS: {
-        "NCR": "#",
-        "INCIDENT/NEAR MISS LOG": "#",
-        "KPIs": "#",
-        "OBSERVATION": "#",
-        "ARCHIVING": "#",
-        "DAILY ATTENDANCE": "#",
-        "Governmental Violations": "#"
-      }
-    },
+        TOTAL: {
+          TITLE: "TOTAL FOR HARAMAIN PROJECTS",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT/NEAR MISS LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#",
+            "Governmental Violations": "#"
+          }
+        },
 
-    DASHBOARD: {
-      TITLE: "HARAMAIN DASHBOARD",
-      LINKS: {
-        "NCR": "#",
-        "INCIDENT/NEAR MISS LOG": "#",
-        "KPIs": "#",
-        "OBSERVATION": "#",
-        "ARCHIVING": "#",
-        "DAILY ATTENDANCE": "#",
-        "Governmental Violations": "#"
-      }
-    },
+        DASHBOARD: {
+          TITLE: "HARAMAIN DASHBOARD",
+          LINKS: {
+            "NCR": "#",
+            "INCIDENT/NEAR MISS LOG": "#",
+            "KPIs": "#",
+            "OBSERVATION": "#",
+            "ARCHIVING": "#",
+            "DAILY ATTENDANCE": "#",
+            "Governmental Violations": "#"
+          }
+        },
 
-    PROJECTS: {
-      "HARAM BUILDING (HB)": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
+        PROJECTS: {
+          "HARAM BUILDING (HB)": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "PIAZZA": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "SERVICE BUILDING (SVB)": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "PEDESTRAIN TUNNELS": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "CUC": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "MARWA BRIDGE": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "MATAF": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "AJYAD & ALMASAA": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          },
+
+          "FRR": {
+            LINKS: {
+              "NCR": "#",
+              "INCIDENT/NEAR MISS LOG": "#",
+              "KPIs": "#",
+              "OBSERVATION": "#",
+              "ARCHIVING": "#",
+              "DAILY ATTENDANCE": "#",
+              "Governmental Violations": "#"
+            }
+          }
         }
       },
-
-      "PIAZZA": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "SERVICE BUILDING (SVB)": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "PEDESTRAIN TUNNELS": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "CUC": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "MARWA BRIDGE": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "MATAF": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "AJYAD & ALMASAA": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      },
-
-      "FRR": {
-        LINKS: {
-          "NCR": "#",
-          "INCIDENT/NEAR MISS LOG": "#",
-          "KPIs": "#",
-          "OBSERVATION": "#",
-          "ARCHIVING": "#",
-          "DAILY ATTENDANCE": "#",
-          "Governmental Violations": "#"
-        }
-      }
-    }
-  },
-
- 
 
       "2026": {
         PASSWORDS: {
@@ -1436,9 +1434,8 @@ USEFUL: {
           "CUC": "braa005",
           "MARWA BRIDGE": "ibrahim001",
           "MATAF": "irfan004",
-          "AJYAD & ALMASAA": "anas009", 
-          "FRR": "mohammed007",
-       },
+          "FRR": "mohammed007"
+        },
 
         TOTAL: {
           TITLE: "TOTAL FOR HARAMAIN PROJECTS",
@@ -1449,14 +1446,15 @@ USEFUL: {
           TITLE: "HARAMAIN DASHBOARD",
           LINKS: { "NCR":"#","INCIDENT/NEAR MISS LOG":"#",
 "KPIs":"#",
-"OBSERVATION":"#", 
+"OBSERVATION":"#",
 "Governmental Violations": "#" }
         },
+
         PROJECTS: {
           "HARAM BUILDING (HB)": { LINKS:{ "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBgFalQF9C2Q4xuWu2DlgzGAcascR0ZOExu5Bw9ZSAPy0E?e=ddCwVr","OBSERVATION":"#", "Governmental Violations": "#" }
         },
-     
-              "FRR": { LINKS:{ "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAykS6woyYhR4PH-fm_0yaIAfrgjmjqFnJcT7RotBqPqRc?e=OKRwUm","OBSERVATION":"#", "Governmental Violations": "#" }
+
+          "FRR": { LINKS:{ "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQAykS6woyYhR4PH-fm_0yaIAfrgjmjqFnJcT7RotBqPqRc?e=OKRwUm","OBSERVATION":"#", "Governmental Violations": "#" }
         },
 
           "PIAZZA": { LINKS:{ "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDfwwDygqRMS7kjXFpZStrBAdSCaljnwK_2KtNSetyd0B0?e=REvHk8","OBSERVATION":"#", "Governmental Violations": "#" }
@@ -1473,20 +1471,16 @@ USEFUL: {
 
           "MARWA BRIDGE": { LINKS: { "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQDddkF4U0MSSbJJ_mwRwhoIAUD4s3usL9H8IYv4KFnegIE?e=5JZ1ei","OBSERVATION":"#", "Governmental Violations": "#" }
         },
-               
-           "JYAD & ALMASAA": { LINKS: { "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQBEHdddpiLlSYti3VnAC43vAZVh_s3v4j9y_Z086b88rLU?e=1rNLd4","OBSERVATION":"#", "Governmental Violations": "#" }
-        },
-          "MATAF": { LINKS: { "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD7zMAQw5kGQIc1tWWqQ9PvAbTuYJW2xKKLokcVHRCBHOc?e=ui0qgj","OBSERVATION":"#", "Governmental Violations": "#" },
-       
-           
-         
-        },
+
+
+          "MATAF": { LINKS: { "NCR":"#","INCIDENT/NEAR MISS LOG":"#","KPIs":"https://sbgo365-my.sharepoint.com/:x:/g/personal/ibrahim_almalki_sbg_com_sa/IQD7zMAQw5kGQIc1tWWqQ9PvAbTuYJW2xKKLokcVHRCBHOc?e=ui0qgj","OBSERVATION":"#", "Governmental Violations": "#" }
+        }
 
         }
       }
     };
 
-  
+
     const UNLOCKED_BY_SCOPE = {
       nonharamain: { "2025": new Set(), "2026": new Set() },
       haramain:    { "2025": new Set(), "2026": new Set() }
@@ -1628,6 +1622,11 @@ USEFUL: {
       if (!url || url === "#") {
         a.classList.add("disabled");
         a.addEventListener("click", ev => ev.preventDefault());
+      } else {
+        a.addEventListener("click", function(ev){
+          ev.preventDefault();
+          openUrl(url);
+        });
       }
       return a;
     }
@@ -1667,7 +1666,7 @@ USEFUL: {
         b.addEventListener("click", ()=>{
           Array.from(wrap.querySelectorAll(".subproj-btn")).forEach(x=>x.classList.remove("active"));
           b.classList.add("active");
-          if(url && url !== "#") window.open(url, "_blank");
+          openUrl(url);
         });
         wrap.appendChild(b);
       });
@@ -1818,24 +1817,24 @@ USEFUL: {
 
       const cards = [];
 
-     if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
-  cards.push(
-    createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
-  );
-}
+      if (projCfg["SEVEN"] && projCfg["SEVEN"].BRANCHES){
+        cards.push(
+          createProjectCard("SEVEN", { isSeven: true, sevenBranchesObj: projCfg["SEVEN"].BRANCHES })
+        );
+      }
 
-if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
-  cards.push(
-    createProjectCard("TAIBA", { isSeven: true, sevenBranchesObj: projCfg["TAIBA"].BRANCHES })
-  );
-}
+      if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
+        cards.push(
+          createProjectCard("TAIBA", { isSeven: true, sevenBranchesObj: projCfg["TAIBA"].BRANCHES })
+        );
+      }
 
       names.forEach(pname=>{
-  if (year === "2026" && pname === "TAIBA") return;
-  cards.push(
-    createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
-  );
-});
+        if (year === "2026" && pname === "TAIBA") return;
+        cards.push(
+          createProjectCard(pname, { projectLinksObj: projCfg[pname]?.LINKS || {} })
+        );
+      });
 
       if (cards.length % 3 === 1) {
         const last = cards.pop();
@@ -1894,7 +1893,7 @@ if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
       }
     }
 
-     const yearToggle = document.getElementById("yearToggle");
+    const yearToggle = document.getElementById("yearToggle");
     const yearButtons = Array.from(yearToggle.querySelectorAll(".year-btn"));
 
     function setYearUI(year){
@@ -1948,33 +1947,33 @@ if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
       if (e.ctrlKey && e.shiftKey && ["i","j","c"].includes(key)) { e.preventDefault(); return; }
     });
 
-      setYearUI("2025");
-    
-(function(){
-  const btn = document.getElementById("contactBtn");
-  if(!btn) return;
+    setYearUI("2025");
 
-  const supportEmail = "ibrahim.almalki@sbg.com.sa";
-  const ccEmail = "b.qattan@sbg.com.sa";
+    (function(){
+      const btn = document.getElementById("contactBtn");
+      if(!btn) return;
 
-  btn.addEventListener("click", ()=>{
-    const subject = encodeURIComponent("HSE Data Portal Support");
-    const body = encodeURIComponent(
-      "Dear Mr. Ibrahim Almalki,\n\n" +
-      "I need support regarding HSE Data Portal.\n\n" +
-      "Issue: \n" +
-      "Project: \n" +
-      "Year: \n\n"    );
+      const supportEmail = "ibrahim.almalki@sbg.com.sa";
+      const ccEmail = "b.qattan@sbg.com.sa";
 
-    const mailto =
-      `mailto:${supportEmail}?cc=${encodeURIComponent(ccEmail)}&subject=${subject}&body=${body}`;
+      btn.addEventListener("click", ()=>{
+        const subject = encodeURIComponent("HSE Data Portal Support");
+        const body = encodeURIComponent(
+          "Dear Mr. Ibrahim Almalki,\n\n" +
+          "I need support regarding HSE Data Portal.\n\n" +
+          "Issue: \n" +
+          "Project: \n" +
+          "Year: \n\n"    );
 
-    window.open(mailto, "_self");
-  });
-})();
+        const mailto =
+          `mailto:${supportEmail}?cc=${encodeURIComponent(ccEmail)}&subject=${subject}&body=${body}`;
+
+        try { window.top.location.href = mailto; }
+catch(e){ window.location.href = mailto; }
+      });
+    })();
 
 
-  
     /* == DAILY ATTENDANCE MODULE == */
     var _daTimer=null;
     var _DAR=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -1985,11 +1984,59 @@ if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
     window._daCalcRow=function(i){var t=daGetV(i,0)+daGetV(i,1)+daGetV(i,2);var e=document.getElementById('da-rt-'+i);if(e)e.textContent=t;daCalcAll();};
     function daBuildTable(){var tb=document.getElementById('da-tbody');if(!tb)return;tb.innerHTML='';_DAS.forEach(function(s,i){var tr=document.createElement('tr');tr.style.background=i%2===0?'#0F2A1C':'#0B2419';tr.innerHTML='<td style="font-weight:800;color:#86EFAC;padding:8px 6px;border:1px solid #164733;text-align:center;">'+(i+1)+'</td><td style="padding:8px 6px;border:1px solid #164733;text-align:center;"><span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:'+s.c+';color:'+s.t+';">'+s.l+'</span></td><td style="padding:8px 6px;border:1px solid #164733;text-align:center;"><input type="number" min="0" value="0" data-dr="'+i+'" data-dc="0" oninput="window._daCalcRow('+i+')" style="width:60px;padding:6px 4px;border:1.5px solid #1C4A34;border-radius:6px;text-align:center;background:#081C14;color:#E9F6EF;font-size:13px;font-weight:600;outline:none;font-family:inherit;"></td><td style="padding:8px 6px;border:1px solid #164733;text-align:center;"><input type="number" min="0" value="0" data-dr="'+i+'" data-dc="1" oninput="window._daCalcRow('+i+')" style="width:60px;padding:6px 4px;border:1.5px solid #1C4A34;border-radius:6px;text-align:center;background:#081C14;color:#E9F6EF;font-size:13px;font-weight:600;outline:none;font-family:inherit;"></td><td style="padding:8px 6px;border:1px solid #164733;text-align:center;"><input type="number" min="0" value="0" data-dr="'+i+'" data-dc="2" oninput="window._daCalcRow('+i+')" style="width:60px;padding:6px 4px;border:1.5px solid #1C4A34;border-radius:6px;text-align:center;background:#081C14;color:#E9F6EF;font-size:13px;font-weight:600;outline:none;font-family:inherit;"></td><td id="da-rt-'+i+'" style="font-weight:800;color:#86EFAC;font-size:14px;background:#0B2E1A;padding:8px 6px;border:1px solid #164733;text-align:center;">0</td><td style="padding:8px 6px;border:1px solid #164733;text-align:center;"><textarea style="width:100%;padding:5px 6px;border:1.5px solid #1C4A34;border-radius:6px;background:#081C14;color:#A9C9B7;font-size:11px;resize:none;outline:none;font-family:inherit;" rows="1" placeholder="..."></textarea></td>';tb.appendChild(tr);});var gt=document.createElement('tr');gt.innerHTML='<td colspan="2" style="background:#1B3A5C;color:#fff;font-weight:800;font-size:13px;padding:10px 6px;border:1px solid #164733;text-align:center;">Grand Total</td><td id="da-gt0" style="background:#D5E8D4;color:#1B3A5C;font-weight:800;padding:10px 6px;border:1px solid #164733;text-align:center;">0</td><td id="da-gt1" style="background:#D5E8D4;color:#1B3A5C;font-weight:800;padding:10px 6px;border:1px solid #164733;text-align:center;">0</td><td id="da-gt2" style="background:#D5E8D4;color:#1B3A5C;font-weight:800;padding:10px 6px;border:1px solid #164733;text-align:center;">0</td><td id="da-gtt" style="background:#D5E8D4;color:#1B3A5C;font-weight:900;font-size:16px;padding:10px 6px;border:1px solid #164733;text-align:center;">0</td><td style="background:#1B3A5C;border:1px solid #164733;"></td>';tb.appendChild(gt);daCalcAll();}
     window.openDailyAttendance=function(projName){var o=document.getElementById('daOverlay');if(!o)return;o.style.display='flex';var inp=document.getElementById('da-proj-name');if(inp){inp.value=projName||'';inp.placeholder='Enter project name here...';}daBuildTable();daUpdateTime();if(_daTimer)clearInterval(_daTimer);_daTimer=setInterval(daUpdateTime,1000);};
-    window.daPrintPDF=function(){var p=document.getElementById('da-proj-name').value.trim();if(!p){alert('Please enter project name');return;}window.print();};
+
+    /* Export: build a standalone window then print from it (works inside SharePoint) */
+    window.daPrintPDF=function(){
+      var pEl=document.getElementById('da-proj-name');
+      var p=pEl?pEl.value.trim():'';
+      if(!p){ alert('Please enter project name'); return; }
+
+      var src=document.querySelector('#daOverlay > div');
+      if(!src){ return; }
+      var clone=src.cloneNode(true);
+
+      var srcFields=src.querySelectorAll('input, textarea');
+      var clnFields=clone.querySelectorAll('input, textarea');
+      for(var i=0;i<srcFields.length;i++){
+        var s=srcFields[i], c=clnFields[i];
+        if(!c) continue;
+        if(c.tagName==='TEXTAREA'){ c.textContent=s.value; }
+        else { c.setAttribute('value', s.value); }
+      }
+
+      var btns=clone.querySelectorAll('button');
+      for(var j=btns.length-1;j>=0;j--){ btns[j].parentNode.removeChild(btns[j]); }
+
+      var w=null;
+      try{ w=window.open('', '_blank'); }catch(e){ w=null; }
+      if(!w){
+        alert('Pop-ups are blocked. Please allow pop-ups for this site, then try Export again.');
+        return;
+      }
+
+      w.document.open();
+      w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Daily Attendance - '+p+'</title>'+
+        '<style>html,body{margin:0;padding:0;background:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}'+
+        'input,textarea{border:none!important;box-shadow:none!important;}'+
+        '*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}</style></head><body></body></html>');
+      w.document.close();
+
+      try{
+        w.document.body.appendChild(w.document.importNode(clone, true));
+      }catch(e){
+        w.document.body.innerHTML = clone.outerHTML;
+      }
+
+      setTimeout(function(){
+        try{ w.focus(); w.print(); }catch(e){}
+      }, 500);
+    };
+
     window.daReset=function(){if(!confirm('Clear all data?'))return;document.querySelectorAll('[data-dr]').forEach(function(e){e.value=0;});document.querySelectorAll('#da-tbody textarea').forEach(function(e){e.value='';});for(var i=0;i<5;i++){var e=document.getElementById('da-rt-'+i);if(e)e.textContent=0;}daCalcAll();};
     window.daClose=function(){var o=document.getElementById('daOverlay');if(o)o.style.display='none';if(_daTimer){clearInterval(_daTimer);_daTimer=null;}};
     document.addEventListener('click',function(e){if(e.target===document.getElementById('daOverlay'))window.daClose();});
     document.addEventListener('keydown',function(e){if(e.key==='Escape')window.daClose();});
+
     /* == PATCH: intercept DAILY ATTENDANCE — 2026 Non-Haramain ONLY == */
     var _origCLB=createLinkButton;
     createLinkButton=function(label,url){
@@ -2004,16 +2051,13 @@ if (year === "2026" && projCfg["TAIBA"] && projCfg["TAIBA"].BRANCHES){
           var projName='';
           var openCard=document.querySelector('.project.open');
           if(openCard){
-            // Check if a branch is selected (SEVEN or TAIBA sub-projects)
             var activeBranch=openCard.querySelector('.subproj-btn.active');
             if(activeBranch){
-              // Get main project name + branch name
               var mainName=openCard.querySelector('.project-left span:last-child');
               var main=mainName?mainName.textContent.trim():'';
               var branch=activeBranch.textContent.trim();
               projName=main+' - '+branch;
             } else {
-              // Regular project — use card title directly
               var nameEl=openCard.querySelector('.project-left span:last-child');
               projName=nameEl?nameEl.textContent.trim():'';
             }
